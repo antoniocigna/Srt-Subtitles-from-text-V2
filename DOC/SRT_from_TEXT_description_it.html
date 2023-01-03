@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="it">
+   <testa>
+      <meta charset="UTF-8">
+      <meta name="description" content="Uno strumento per esercitarsi nella comprensione della lingua" />
+      <meta name="keywords" content="HTML,CSS,JavaScript, bilingue, video, audio, sottotitoli,clip" />
+      <meta name="autore" content="Antonio Cigna" />
+      <meta name="date" content="maggio 2021" />
+      <meta name="viewport" content="width=larghezza-dispositivo, scala-iniziale=1,0" />
+      <title>Srt Sottotitoli dal testo</title>
+    <style>
+div, tabella, tr, td {
+  confine-collasso:separato;
+  spaziatura dei bordi:0px;
+}
+
+</style>
+   </head>
+   <body style="width:98%; font-size:1.5rem;">
+      <h1>Srt Sottotitoli da testo</h1
+      <p>
+         Questa applicazione serve per ottenere rapidamente un file di sottotitoli da un file di testo che contiene la trascrizione di un file video o audio.
+      </p>
+
+<p> Il tempo necessario per creare il file è poco più della durata del file video o audio in riproduzione. </p>
+<p>
+Avvia la riproduzione e segui col mouse le parole sul testo mentre vengono pronunciate, quando percepisci una pausa, ad esempio alla fine della frase, clicca sull'ultima parola pronunciata.  
+Questa azione inserisce il tempo trascorso (in ore minuti, seconid millisecondi) dall'inizio del video o audio.  
+<br>
+
+<div>
+Ad esempio se clicchi sulla parola <i> Corona </i> nella riga seguente
+<table ><tr><td style="width:4rem;">&nbsp;</td><td>
+<i>Die Berliner Familie Burgdorff nach einem Jahr Corona:Alle sind zu Hause, alle beschäftigt am Computer - okay, fast alle.
+Leandro kämpft mit Mathematik. </i>
+</td></tr></table>
+
+la linea viene spezzata così:
+<table><tr><td style="width:4rem;">&nbsp;</td><td>
+ <i>
+00:00:00,000 Die Berliner Familie Burgdorff nach einem Jahr Corona:
+<br>00:00:09,531 Alle sind zu Hause, alle beschäftigt am Computer - okay, fast alle. </i>
+</td></tr></table>
+</div>
+
+
+
+<div>
+<br>e poi se clicchi sulla parola <i> Computer </i>, la riga originale diventa:
+<table><tr><td style="width:4rem;">&nbsp;</td><td>
+00:00:00,000 Die Berliner Familie Burgdorff nach einem Jahr Corona:
+<br>00:00:09,531 Alle sind zu Hause, alle beschäftigt am Computer
+<br>00:00:13,837 - ok, fast alle.
+</td></tr></table>
+</div>
+<br>
+<div>
+Nota che se non ci sono correzioni da fare non è necessario fermare la riproduzione che può continuare senza fermarsi fino alla fine. <br>
+<br>
+Al termine della riproduzione, premendo il pulsante <b> Scarica file </b>, viene scaricato un file di sottotitoli di tipo <b> srt </b>.
+<br><br>
+Questo è l'output dell'esempio precedente:
+<table><tr><td style="width:4rem;">&nbsp;</td><td>
+<i>
+1
+<br>00:00:00.000 -> 00:00:09,531
+<br>Die Berliner Familie Burgdorff nach einem Jahr Corona:
+<br>&nbsp; &nbsp; &nbsp; &nbsp;
+<br>2
+<br>00:00:09,531 -> 00:00:13,837
+<br>All sind zu Hause, alle beschäftigt am Computer
+<br>&nbsp; &nbsp; &nbsp; &nbsp;
+<br>3
+<br>00:00:13,837 -> 00:00:16,379
+<br>- ok, fast alle.
+<br>&nbsp;
+</i>
+</td></tr></table>
+</div>
+<div>
+Se una parola è stata cliccata nel momento sbagliato, puoi correggere:
+<table><tr><td style="width:4rem;">&nbsp;</td><td>
+ferma la riproduzione,
+<br>sposta il cursore della linea di controllo video/audio indietro di alcuni secondi,
+<br>riavvia la riproduzione e
+<br>nell'esatto momento clicca di nuovo sulla stessa parola di prima.
+</td></tr></table>
+in questo modo il nuovo tempo andrà a sostituire quello precedente.
+
+</div>
+<div>
+<br>
+Se hai cliccato sulla parola sbagliata,
+<table><tr><td style="width:4rem;">&nbsp;</td><td>
+fai doppio click su questa parola,
+<br>Il tempo inserito verrà eliminato e la riga successiva verrà spostata nella posizione precedente.
+<br>Ad esempio:
+<br>00:00:09,531 Alle sind zu Hause, alle beschäftigt am Computer
+<br>00:00:13,837 ok, fast alle.
+</td></tr></table>
+<br>Se fai doppio click su <i> Computer </i> ottieni:
+<table><tr><td style="width:4rem;">&nbsp;</td><td>
+00:00:09,531 Alle sind zu Hause, alle beschäftigt am Computer - okay, fast alle. </ i>
+</td></tr></table>
+</div>
+       <br>
+
+      <br>
+   </body>
+</html>

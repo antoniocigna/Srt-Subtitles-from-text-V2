@@ -1,0 +1,414 @@
+<!DOCTYPE html> 
+<html>
+   <head>
+      <meta charset="UTF-8">
+      <meta name="description" content="Build an srt subtitle file from a text and a video or audio file" >	  
+	  <meta name="description" content="Can be used to modify an existing srt or vtt subtitle file"       >	  
+	  <meta name="description" content="The time needed to do it, can be almost equal to the normal video/audio run time">	 
+	  <meta name="description" content="It only works on desktop, completely offline, no web needed to run it.">	 
+	  
+	  <meta name="version"     content="2">
+      <meta name="keywords"    content="HTML, CSS, JavaScript, video, audio, subtitle, srt" >
+      <meta name="author"   content="Antonio Cigna" >
+      <meta name="date"     content="2021-2022" >
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" >
+	  
+      <title>Build an SRT Subtitle file from Text and Video or Audio - Antonio Cigna 2021-2022</title>	  	  
+	
+	  <link rel="stylesheet"   href="./cbcsrt_code/SRT_v2_from_TEXT.css">      	
+		
+	
+  
+   </head>
+   <body onbeforeunload="return closeThePage()">
+      <div id="id_div10"  class="center" style="width:100%; height:98%;margin:auto; display:block; text-align:center; border: 0px solid black;">
+         <div id="id_part1"   class="center"  style="border: 0px solid green;width:100%; ">
+           
+            <h1 id="id_h1"><span id="m001">?001Build an srt file from a text and a video or audio file</span>
+				<br><small><small><span id="id_h11x">Antonio Cigna 2021-2022</span></small></small></h1>
+			
+            <br>
+			<div  class="center"  style="display:flex;font-size:1em;">
+				<div  class="center"  style="text-align: left;">
+						<span id="id_h1_20" style="margin:0;"><span id="m316">builds a srt subtitle file using</span></span>
+						<ul style="margin:0;">
+							<li id="id_h1_21" >
+								<span id="m317">a text file <br>or an existing srt or vtt subtitle file 
+								<small>(eg. to correct the time fields)</small>
+								</span>
+							</li>
+							<li id="id_h1_22" ><span id="m318">a video or an audio file.</span></li>
+						</ul>
+				</div>
+			</div>
+			
+			<br>
+			<br>
+            <div  id="id_td_txt3"  class="center"  style="margin: auto;text-align: center; width:50%; " >
+               <div  class="center" >
+                  <div id="id_td_txt0" style="margin:auto;text-align:center;width:50%; border: 1px solid black;"  >
+					<span id="m023">?id_td_txt0 Trascrizione</span></div>
+					<input id="id_file2text" type="file"  style="width:50%;margin: auto;text-align: center; border: 0px solid blue;" 
+						onchange='handleFiles(this, "id_text1", "value",  fun_after_drop_due, "id_msg2"  )' >    
+               </div>
+            </div>
+            <div  id="id_td_txt1"  class="center"  style="margin:auto; text-align:center; width:50%;  border: 0px solid blue;" >
+               <textarea id="id_text1" style="display:none;height:2rem; width:98%;  border: 1px solid black; text-align:top;" 
+                  placeholder='paste the text here'></textarea>		
+               <span id="id_msg2"  style="color: red;font-size:1.3rem;text-align:center;"></span>	
+            </div>
+            <br><br>
+            <div id="id_td_vid3"  class="center" style="margin: auto;text-align: center; width:50%; " >
+               <div id="id_td_vid0"  class="center" style="margin:auto;text-align:center;width:50%; border: 1px solid black; "  ><span id="m013">?id_td_vid0 Video o Audio</span></div>
+              
+				<input id="id_videoUpload" type='file'   
+					style="width:50%;margin: auto;text-align: center; border: 0px solid blue;">   			  
+				  
+            </div>
+            <p id="id_msg1"  style="font-size:1.3rem;  padding: 0; font-size:1.2em; color:red;"></p>
+			
+         </div>
+         <br>
+		 <button id="id_split" class="button" style="" onclick="onclick_confirm_two()"><span id="m062">062Continue</span></button>
+         <!--  end of part1 -->
+         <div id="id_td_vid1" class="center td1"  style="display:none; border: 2px solid red;width:100%;min-height:8em; 
+            text-align:center; vertical-align:middle; margin:auto;border: 0px solid violet; ">
+			
+            <video  id="id_myVideo"  controls   style="margin:auto;border: 2px solid green;">
+				Your browser does not support the video tag.
+            </video>
+			<div id="id_out1"></div>
+         </div>
+		 
+		 
+         <div id="id_div20"  class="center" style="width:100%;display:none;height:100%; border:0px solid black;" >
+            <div id="id_video_time"  class="center" style="text-align:center;width:98%;height:auto"></div>
+            <div id="id_video_sub"   class="center" style="color:blue;font-size:1.4rem;text-align:center;background-color:yellow;"></div>
+            <div id="id_dummy_sub"><br>&nbsp;</div>
+            <!-- <br><b><span id="id_hb1" style="font-size:1.2rem;">?001Build an srt file from a text and a video or audio file</span></b> -->
+			
+			
+            <div id="id_div_head1"  class="center" style="display:flex; border:0px solid red;">
+				
+				<button id="m304" class="button" style="margin:auto; text-align:center; vertical-align:top;" onclick="onclick_show_what()">What to do</button> 
+				<!--
+				<div  class="center"  style="vertical-align:middle;text-align:center;">
+					<span id="id_spltStopM0"><span id="m322">stop playback after split</span></span>
+					<br>
+					<input type="radio" name="spltStop" id="id_spltStopY" checked><span id="id_spltStopMY"><span id="m324">Yes</span></span>   
+					&nbsp; &nbsp; &nbsp; 
+					<input type="radio" name="spltStop" id="id_spltStopN" ><span id="id_spltStopMN"><span id="m323">No</span></span>
+				</div>	
+				-->
+				<button id="m063" style="margin:auto; text-align:center;" class="button" onclick="onclick_pauseContinue(this)" >Stop/Continue</button>
+			  
+               <div id="id_div_speed"  class="center"  style="width:15em;font-size:0.8;">
+                  <div><b><span id="m064">velocità di riproduzione</span></b></div>
+                  <input type="range" min="0.0" max="2.0" value="1.0" step="0.001"   id="id_rangespeed_gen1" 
+						oninput="changeVideoSpeed_gen1(this)" style="width:100%;color:red;">
+                  <div  class="center"  style="line-height:0.7;width:100%;">	
+						<div  id="val1_speed0"  style="display:none;padding-bottom:0.2em;">	
+							(<span id="val1_speed"></span>)&nbsp; 
+							<span id="m065"  style="color:red;"></span>
+						</div>
+					<div style="width:100%; display:flex;">
+						<div style="width:25%;text-align:left;">0</div>
+						<div style="width:25%;text-align:left;">|</div>
+						<div style="width:25%;text-align:left;">1</div>
+						<div style="width:24%;text-align:left;">|</div>
+						<div style="          text-align:left;">2</div>
+					</div>		
+                     <br>
+                     <span id="id_new_speed2" style="display:none;font-size:0.5em;width:4em;"></span>
+                  </div>
+               </div>
+			   
+				<button id="m300" style="margin:auto; text-align:center;" class="button" onclick="onclick_write_srt()">?300Download the srt file</button>			   
+            </div>
+			
+			<div id="id_whatToDo" class="newspaper" style="display:none;">
+					   <span id="id_whatButt"> &nbsp;  </span>
+					   <br>
+					   <span id="id_whatToDo2"  style="margin:auto; text-align:left;vertical-align:top;"><span id="m306">m306</span></span>                   
+			</div>
+			
+			
+			<div id="id_srt_err"  style="display:none;font-size:1.2em;color:red;">
+				<span id="id_srt_err_file"></span> &nbsp;&nbsp; 
+				<span id="m004">input srt error</span>
+			</div>
+			
+			
+				
+			<div id="id_div_p_text" style="width:100%; height:80%; margin:auto; border: 1px solid black;padding:0.4rem 0 1rem 0;">
+				<div id="id_div_p_head"><span id="m315">
+					<b>Set the right time of each row by clicking on the speaking head and last row word </b>
+					<br>
+					(to read more about please click on the <b>what to do</b>button)
+					</span> 
+				</div>
+				<div id="id_div_p_text" style="width:100%; height:95%; overflow-y: auto;">					
+					<p id="id_p_text"   style="line-height:1.6; font-size:16px;text-align: left; ">            
+				</div>
+			</div>
+            <!-- ricerca del momento esatto di separazione di due parole contigue  --> 
+           
+			<hr>
+      <div id="id_div_cut" class="w_p_100 txt_center border1 marg_auto" style="display:none;height:100%; padding:0.4em 0 1em 0;     ">
+	 
+      <div id="id_slider_separ_time">
+      <div style="display:none;">called by 'onclick_hideShowSlider(ele_caller)'</div>
+      <div id="n00"  class="marg_auto w_p_100" >
+
+         <div id="input_timeslider" style="display:none;"></div>
+         <br>         
+      </div>
+      <div id="nascondi" class="marg_auto txt_center w_p_100  center"  style="display:block;width:95%;border:0px solid black;">
+		
+		<div class="w_p_100 d_flex flex_space_around"  style="border:0px solid red;">  		
+            <div class="txt_right"  style="border:1px solid green;width:35%;padding-top:0.5em;" >
+				
+               <span class="txt_left">...&nbsp;</span>	
+               <span id="idword_left" class="txt_right"> Hi!   &nbsp;  Ihr  kennt  euch?  </span>				  
+			   <br>
+				<div class="txt_right">		 
+						<button id="id_playLeft" class="button2" onclick="playLeft()"><b><span id="m069">Play sinistra</span></b></button> 				
+				</div>		
+				<div  style="width:100%;text-align:right;"> 					
+					<br>	
+					<span id="rangeVal1_m1"><span id="m325">inizia Play</span></span>&nbsp; 
+					<span id="rangeVal_show_L"    style="text-align:left;box-sizing: border-box;padding-left:0px; width:100%;color:blue;">1.0</span>
+					&nbsp;<span id="rangeVal1_m2"><span id="m326">secondi prima del tempo </span></span>&nbsp;<b>T</b>
+					 
+					<div id="id_fromValue" class="txt_left" style="display:none;">15,342</div>	
+				   <div class="w_p_100 pad0mar0"  style="margin:auto; width:100%; text-align:center; " >				   
+						<input id="id_inpRngFrom" type="range" min="0" max="2" value="1" step="0.1" style="width:100%;color:blue;"  class="rovescio "
+							oninput="updateVal_L()"  >	
+					</div>					
+               </div>
+               <div style="display:none;">
+                  <small>
+                  <span>-</span>
+                  <span id="id_minusLimit"></span>
+                  </small>
+               </div>				   
+            </div>			
+			<div class="txt_center	w_p_10" style="border:1px solid black;margin:0 1em;01em;width:20%;">	
+				
+				   <span id="m0701">Tempo</span> <b>T</b><br>
+				   <span id="m0702" style="font-size:0.8em;">di fine Play sinistra <br>e inizio di Play destra</span>
+				   <br>
+				   <br>
+				   <span id="id_cut_point"  class="c_changeCutVal">17,342</span>  secondi
+				   <br>
+				   <span id="id_cut_point_HHMMSS">00:00:17,341</span>
+				
+            </div>
+		
+            <div class="txt_left" style="border:1px solid green;width:35%;padding-top:0.5em;" >	
+				
+               <span id="idword_right" class="txt_left"> &nbsp;  Ja,  ich  helfe  manchmal  im </span> 
+               <span class="txt_left">&nbsp;...</span>	
+			   <br>
+               <div class="txt_left">				  
+					<button id="id_playRight" class="button2" onclick="playRight()"><b><span id="m071">Play destra</span></b></button>  	
+					</div>
+				<div  style="width:100%;text-align:left;"> 			
+					
+					
+					<br>
+					<span id="rangeVal2_m1"><span id="m327">termina Play</span></span>&nbsp; 
+					<span id="rangeVal_show_R"    style="text-align:left;box-sizing: border-box;padding-left:0px; width:100%;color:blue;">1.0</span>
+					&nbsp;<span id="rangeVal2_m2"><span id="m328">secondi dopo il tempo</span></span>&nbsp; <b>T</b>
+					
+					<div id="id_toValue" class="txt_left" style="display:none;">19,342</div>
+				
+					
+					 <div class="w_p_100 pad0mar0"   style="margin:auto; width:100%; text-align:center; " >
+						<input id="id_inpRngTo" type="range" min="0" max="2.0" value="1.0" step="0.1" style="width:100%;"  class="dritto" 
+						oninput="updateVal_R()"  >				
+					</div>
+               </div>
+		
+               <div style="display:none;">
+                  <small>
+                  <span>-</span>
+                  <span id="id_plusLimit"></span>
+                  </small>
+               </div>
+			   
+			   
+            </div>
+         </div>
+      </div>
+	 
+	 
+      <!-- xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx  -->
+
+		<br>
+	 
+      <div class="border1 w_p_95 center">
+		<!--
+         <div id="id_0linkLineDiv"  style="display:none;" class="w_p_100 d_flex flex_justAlignCenter st19" >
+            <div id="id_0left_linkLine"  class="txt_right" ></div>
+            <div id="id_0middleLink" ></div>
+            <div id="id_0right_linkLine" class="txt_left"></div>
+         </div>
+		
+         <div id="inputRangeDiv"   class="marg_auto txt_center w_p_100 d_flex flex_justAlignCenter" 
+				style=" display:none;  background: linear-gradient(to right, white 0%, white 25%, lightgrey 25%, lightgrey 75%, white 75%);"
+				>
+            <div class="w_p_100 pad0mar0">
+               <input id="id_inpRngFrom" type="range"  min="0"  max="100" value="50" class="rovescio w_p_100 pad0mar0" 
+					oninput="oninput_getInpValueLR()" >	
+            </div>
+            <div class="w_p_100 pad0mar0" >
+               <input id="id_inpRngTo"   type="range"  min="0"  max="100" value="50"  class="dritto w_p_100 pad0mar0"  
+					oninput="oninput_getInpValueLR()" >			
+            </div>
+         </div>
+         <div id="id_linkLineDiv"  style="display:none;"    class="marg_auto txt_center w_p_100 d_flex flex_justAlignCenter" >
+            <div id="id_left_linkLine"  class="cl_left txt_center w_p_50 pad0mar0 height_5em" >
+            </div>
+            <div id="id_middleLink" class="txt_center height_5em" >
+               <div id="id_m_1"></div>
+               <div id="id_m_2"></div>
+               <div id="id_m_3">secondi</div>
+			   <br>
+			   <div id="id_wordsXsecs"  style="display:none;"></div>
+            </div>
+            <div id="id_right_linkLine" class="cl_right txt_center w_p_50 height_5em" >				
+            </div>
+         </div>
+		 -->
+		 
+		 
+         <div id="z1"  class="d_flex  flex_justAlignCenter w_p_100 border1 bg_color_lgrey" >
+            <div class="w_p_100">
+               <input id="id_loopCursor" type="range" min="0" max="400" step="0.001"   value="0" 
+                  class="cutSlider w_p_100 pad0mar0"			
+                  onchange='onchangeCutTimeValue3()'	>
+               <div class="ticks w100	padmar0	border1 ">
+                  <span class="o_txt">|</span>
+                  <span class="o_txt">|</span>
+                  <span class="o_txt">|</span>
+                  <span class="o_txt">|</span>
+                  <span class="o_txt">|</span>
+                  <span class="o_txt">|</span>
+                  <span class="o_txt">|</span>
+                  <span class="o_txt">|</span>
+                  <span class="o_txt">|</span>
+                  <span class="o_txt">|</span>
+                  <span class="o_txt">|</span>
+               </div>
+            </div>
+         </div>
+      </div>
+      <div class="marg_auto d_flex flex_justContCenter w_em_15">	
+         <label id="id_lab1"  class="button2 w_em_5">
+         <input type="radio" name="radio_playloop" value="play"  onclick="onclick_rLoopStop(this)">PLAY &infin;
+         </label>							
+         <label id="id_lab2"  class="button2 w_em_5">
+         <input type="radio"  name="radio_playloop" value="stop"  onclick="onclick_rLoopStop(this)" checked>STOP
+         </label>  	
+      </div>
+      <div class="marg_auto txt_center w_p_80">
+         <button id="id_butC" class="button2" onclick="onclick_centerTheCursor()" ><span id="m314">Centra il cursore</span></button>
+         <script>
+            var ele_butC = document.getElementById("id_butC") ;
+            const css_butC = window.getComputedStyle(ele_butC, null);
+            let butt_bgColor = css_butC.getPropertyValue("background-color");
+            document.getElementById("id_lab1").style.backgroundColor = butt_bgColor; // force button bg color to label  
+            document.getElementById("id_lab2").style.backgroundColor = butt_bgColor; // force button bg color to label              
+         </script>
+         <div class="w_p_100 d_flex flex_justContCenter" >
+		 
+            <div id="id_div_copy_speed2" class="w_p_20 fsize08"  style="margin-top:0.5em;">
+               <div><b><span id="m054">velocità di riproduzione di Play</span>&nbsp; &infin;</b>
+               </div>
+               <input type="range" min="0.0" max="2.0" value="1.0" step="0.1" id="id_rangespeed_loop3" 
+                  oninput="changeVideoSpeed_loop3(this)" class="w_p_100 co_red" >
+			   <div  class="center"  style="line-height:0.7;width:100%;">	
+					<div  id="val3_speed0"  style="display:none;padding-bottom:0.2em;">	
+						(<span id="val3_speed"></span>)&nbsp; 	
+						<span id="m055" style="color:red;"></span>
+					</div>
+                  <div class="w_p_100 d_flex" >
+                     <div class="txt_left w25" style="width:25%;text-align:left;">0</div>
+                     <div class="txt_left w25" style="width:25%;text-align:left;">|</div>
+                     <div class="txt_left w25" style="width:25%;text-align:left;">1</div>
+                     <div class="txt_left w25" style="width:24%;text-align:left;">|</div>
+                     <div class="txt_left w25" style="          text-align:left;">2</div>
+                  </div>
+               </div>
+            </div>
+         </div>
+         <br>
+      </div>
+      <!--   xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx -->
+
+	  
+	    <div class="txt_center w_p_100 d_flex flex_justContCenter marg_auto">
+         <button id="id_b_cance" class="button2" onclick="onclick_separ_cancel()">
+					<span id="id_b_Mcance"><span id="m311">Annulla</b> <br>e<br> torna indietro</span></span> </button> 
+         <button id="id_b_reset" class="button2" onclick="onclick_separ_reset()">
+			<span id="id_b_Mreset"><span id="m313"><b>Ripristina</b>  <br> originale</span></span><br>
+			<span  id="id_b_resetVal" class="c_origCutVal"></span>
+		  </button> 
+         <button id="id_b_confe" class="button2" onclick="onclick_separ_confirm()">
+			<span id="id_b_Mconfe"><span id="m312"><b>Conferma</b>  <br>nuovo valore</span></span><br>
+			<span id="id_b_confeVal"class="c_changeCutVal"></span>
+		  </button> 
+      </div>
+	 
+      <span id="id_playNext_msg"  style="display:none;"></span>  
+      <div id="id_caller_num_id" style="display:none;"></div>
+      <br>
+		<div id="id_movlim1">
+			<span id="m321">	
+				<span>Questa pagina serve per definire meglio il momento preciso <b>T</b> in cui termina un riga ed inizia la successiva</span>
+				<br><span>Per verificare quanto sia buono il tempo di separazione, 
+				<br>premi il tasto  <b>Play Sinistra</b> per ascoltare il momento immediatamente prima della separazione </span>
+				<br>e  <b>Play Destra</b> quello immediatamente dopo.  
+				
+				<br>
+				<br>Il cursore <span class="cutSliderImg">&nbsp;&nbsp;</span> serve a modificare  il valore del tempo T, può essere spostato trascinandolo col mouse 
+					oppure usano i tasti <b>PLAY &infin;</b> e <b>STOP</b>.  
+				
+				<br>Premi PLAY &infin; per ascoltare il pezzettino all'infinito e premi STOP appena la parola che completa la riga è stata pronunciata. 
+				
+				<br>Per essere più precisi conviene diminuire la velocità di riproduzione spostando il cursore 
+				<b>Modifica la velocità di riproduzione &infin;</b>. 
+				<br>
+				<br>L'inizio e la fine del brano da riprodurre possono essere modificati spostando il cursore di sinistra per l'inizio e di destra per la fine.  
+				<br>
+				<br>Quando si è soddisfatti del risultato premere il tasto <b>Conferma</b>. 
+			</span>
+        </div>
+		
+         </div>
+         <!-- end of div20 -->
+      </div>
+      <!-- end of div 10 -->	
+      <!--  xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx  -->
+      <div id="id_symb" style="display:none">
+         <span id="id_symb_speakinghead">&#128483;</span>
+         <span id="id_symb_sunrise"     >&#127748;</span>
+         <span id="id_symb_sunset"      >&#127751;</span>
+      </div>
+	
+		<div id="msgOther"  style="display:none;">
+			<span id="m301">301 video or audio file is missing</span>
+			<span id="m302">302 incompatible</span>
+			<span id="m303">303 the transcription of the video or audio file is missing (no file read,  nothing pasted or written)</span>	
+			<span id="m305">305 il tipo di file non è né video né audio</m305></span>			
+		</div>
+		
+	  <script src="./cbcsrt_code/SRT_v2_from_TEXT.jstxt"   ></script>	 
+	  <script src="./cbcsrt_code/cbcsrt_MESSAGES.msg"      ></script>
+	  
+      <script src="./cbcsrt_code/cbc_MESSAGE_manager.jstxt"  onload="messageMain('S')"></script> 		  
+
+	 
+   </body>
+</html>

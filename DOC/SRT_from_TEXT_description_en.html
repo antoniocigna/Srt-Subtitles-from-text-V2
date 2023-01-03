@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="it">
+   <head>
+      <meta charset="UTF-8">
+      <meta name="description" content="A tool to practice language comprehension" />
+      <meta name="keywords" content="HTML,CSS,JavaScript, bilingue, video, audio, subtitle,clip" />
+      <meta name="author" content="Antonio Cigna" />
+      <meta name="date" content="May 2021" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <title>Srt Subtitles from Text</title>
+    <style>
+div, table, tr, td {
+  border-collapse: separate;
+  border-spacing: 0px;
+}
+
+		</style>
+   </head>
+   <body  style="width:98%; font-size:1.5rem;">
+      <h1>Srt Subtitles from Text</h1
+      <p>
+         This application aims to quickly obtain a subtitle file from a text file that contains the transcription of a video or audio file.
+      </p>
+
+<p> The time required to create the file is practically equal to the duration of the video or audio file being played. </p>
+<p>
+Start the reproduction and follow, scrolling with the mouse the speech on the text, 
+when you perceive a pause, for example at the end of the sentence, 
+click on the last spoken word.
+<br>This action inserts the elapsed time (in hours, minutes, seconds, milliseconds) since the start of the video or audio.
+
+<br>
+<div>
+For example if you click on the word <i> Corona </i> in the following line
+<table ><tr><td style="width:4rem;">&nbsp;</td><td>
+<i>Die Berliner Familie Burgdorff nach einem Jahr Corona: Alle sind zu Hause, alle beschäftigt am Computer - okay, fast alle.
+Leandro kämpft mit Mathematik. </i>
+</td></tr></table>
+
+the line is broken as following:
+<table><tr><td style="width:4rem;">&nbsp;</td><td>
+ <i>
+Die Berliner Familie Burgdorff nach einem Jahr Corona:
+<br>00:00:09,531 Alle sind zu Hause, alle beschäftigt am Computer - okay, fast alle. </i>
+</td></tr></table>
+</div>
+
+
+
+<div>
+<br>and then if you click on the word <i> Computer </i>, the original line becomes:
+<table><tr><td style="width:4rem;">&nbsp;</td><td>
+00:00:00,000 Die Berliner Familie Burgdorff nach einem Jahr Corona:
+<br>00:00:09,531 Alle sind zu Hause, alle beschäftigt am Computer
+<br>00:00:13,837 - okay, fast alle.
+</td></tr></table>
+</div>
+<br>
+<div>
+Note that if there are no corrections to be made it is not necessary to stop the playback which can continue without stopping until the end. <br>
+<br>
+At the end of the playback, pressing the <b> Download file </b> button, downloads a subtitle file of  <b> srt </b>  type.
+<br><br>
+This is the output of the above example:
+<table><tr><td style="width:4rem;">&nbsp;</td><td>
+1
+<br>00: 00: 00,000 -> 00: 00: 09,531
+<br>Die Berliner Familie Burgdorff nach einem Jahr Corona:
+<br>&nbsp; &nbsp; &nbsp; &nbsp;
+<br>2
+<br>00: 00: 09,531 -> 00: 00: 13,837
+<br>Alle sind zu Hause, alle beschäftigt am Computer
+<br>&nbsp; &nbsp; &nbsp; &nbsp;
+<br>3
+<br>00: 00: 13,837 -> 00: 00: 16,379
+<br>- okay, fast alle.
+<br>&nbsp;
+</td></tr></table>
+</div>
+<div>
+If a word was clicked at the wrong time, you can correct:
+<table><tr><td style="width:4rem;">&nbsp;</td><td>
+stop playback,
+<br>move the cursor of the video/audio control line back a few seconds,
+<br>restart the playback and 
+<br>at the exact moment click again on the same word as before.
+</td></tr></table>
+in this way the new time will replace the previous one.
+
+</div>
+<div>
+<br>
+If you clicked on the wrong word,
+<table><tr><td style="width:4rem;">&nbsp;</td><td>
+double click on it,
+<br>the entered time will be deleted and the line following it will be moved to the previous position.
+<br>For example:
+<br>00:00:09,531 Alle sind zu Hause, alle beschäftigt am Computer
+<br>00:00:13,837 - okay, fast alle.
+</td></tr></table>
+<br>If you double click on <i> Computer </i> you get:
+<table><tr><td style="width:4rem;">&nbsp;</td><td>
+00:00:09,531 Alle sind zu Hause, alle beschäftigt am Computer - okay, fast alle. </i>
+</td></tr></table>
+</div>
+       <br>
+
+      <br>
+   </body>
+</html>
