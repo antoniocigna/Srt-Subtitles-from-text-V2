@@ -289,15 +289,20 @@ function get_subtitle_strdata( inpsub ) {
 	
 		// add_nodialog_clips2( list_time_from, list_time_to, list_text ,idsrt );	
 		//------------------------	
+		var txt00;
 		for(var k=1; k < list_ix_end.length; k++) {
 			txt1="";		
 			var ixfrom = list_ix_beg[k];
 			if (ixfrom < 0) { continue; }
 			var ixto  =  list_ix_end[k];
 			for(var z= ixfrom+1; z < ixto; z++) { 
-				txt1 += subline[z] + " " ;
+				txt00 = subline[z].trim(); 
+				
+				//console.log("z=" + z + " " + subline[z] + "<==");
+				
+				if (txt00 !="")  txt1 += "\n" + txt00 + " " ;
 			}
-			list_text[k] = txt1;			
+			list_text[k] = txt1.substring(1); 		
 		} 
 		//------------------------	
 		/**
@@ -779,16 +784,6 @@ function get_time( headRow ) {
 //---------------------------
 function push_gr_srt00( xtime_from_secs, xtime_to_secs, xtime_from_hhmmss, xtime_to_hhmmss,  prev_rowText) {
 
-	var ret=0; 
-	/**
-	if ( xtxtGr.indexOf(end_text_symb) >= 0) {
-				xtime_to_hhmmss = xtime_from_hhmmss; 
-				xtime_to_secs   = xtime_from_secs; 
-				xtxtGr = " ";
-				ret = -1; 
-	}
-	***/
-    
 	var str1 = prev_rowText.replaceAll("&nbsp;"," ").replaceAll("   "," ").replaceAll("  "," ").trim() ;
 	
 	list_time_to_secs.push( xtime_to_secs);
@@ -802,15 +797,19 @@ function push_gr_srt00( xtime_from_secs, xtime_to_secs, xtime_from_hhmmss, xtime
 	
 	list_time_stamp[ this_ix ] =  xtime_from_hhmmss + " --" + '>' + " " + xtime_to_hhmmss  ;
 	
-	
-	console.log("\tpush_gr_srt00 " + " v=" + this_ix +  " from=" + list_time_from_secs[  this_ix ] +   " to=" + list_time_to_secs[  this_ix ] +  
-			" " + list_time_stamp[ this_ix ] + 
-			" list_text[" + this_ix + "] = " + list_text[ this_ix ] + "\n" );
-		
-	
-	return ret; 
+	return this_ix; 
 	
 } // end of  push_gr_srt00() 
+
+//-----------------------------------
+
+function appendTextToLastValid( ix2, text1) {
+	
+	var str1 = text1.replaceAll("&nbsp;"," ").replaceAll("   "," ").replaceAll("  "," ").trim() ;
+	list_text[ ix2 ] += "\n" + str1; 
+	
+} // end of appendTextToLastValid()  
+
 //----------------------------
 function build_srt_list() {
 
@@ -846,7 +845,7 @@ function build_srt_list() {
 	for (var x = begX; x < last_x; x++) {
 	
         var child1 = butwords[x];
-		
+		var last_ix=-1; 
 		console.log("\n--------------------------\nbuild_srt_list() child1=" + child1.outerHTML ); 
 		
 		if (child1.tagName == "SPAN") {	// row begin is in   span/span	
@@ -857,54 +856,29 @@ function build_srt_list() {
 			
             time_to_hhmmss = time_to[0].trim();
             time_to_secs   =  parseFloat( time_to[1]);	
+			/***
+			if (time_from_hhmmss == FAKE_time) {  // this is last part of the text which doesn't have assigned timestamp ( run has been interrupted)  
+				appendTextToLastValid( last_ix, txtGr ); 
+				txtGr=""; 
+				continue; 
+			}
+			***/
 			
-			rc = push_gr_srt00( time_from_secs,time_to_secs, time_from_hhmmss, time_to_hhmmss,    txtGr);
-			if (rc < 0) { 
-				last_x = -1 ;
-				break;
-			} 
+			last_ix = push_gr_srt00( time_from_secs,time_to_secs, time_from_hhmmss, time_to_hhmmss,    txtGr);
+			
+			
             time_from_hhmmss = time_to_hhmmss;
             time_from_secs = time_to_secs;
             txtGr = "";
-            continue;
-			
+            continue;			
 			
 		} else {
 			txtGr += child1.innerHTML;
 		}		
 	}
-	//-----------------------------
-	/***
-	var pre_timesec_f    =0;
-	var pre_timeHHMMSS_f = "00:00:00,000"; 
-	//------------------
-	for(var f=1; f < list_time_from_secs.length; f++) {
-		
-		var timesec_f    = list_time_from_secs[f];
-		var timeHHMMSS_f = sec2time(timesec_f).replace(".", ",");
-						
-		list_time_to_secs[f-1] = timesec_f;   // now_from = previous_to
-		
-		list_time_stamp[f-1]  = pre_timeHHMMSS_f + " --" + '>' + " " +  timeHHMMSS_f;
-		
-		console.log("loop f=" + f + " now_from=" + timeHHMMSS_f  + "    f-1=" + (f-1) + " time=" + list_time_stamp[f-1]  );  
-		
-		pre_timesec_f    = timesec_f
-		pre_timeHHMMSS_f = timeHHMMSS_f
-		
-	}
-	***/
-	//--------------------------------------
-	
-	/**
-	if (last_x > 0) {
-		time_to_hhmmss = sec2time(vid.duration).replace(".", ",");
-		time_to_secs = vid.duration;
-		push_gr_srt(time_from_hhmmss, time_to_hhmmss, time_from_secs, time_to_secs, txtGr);
-	}
-	***/
 
 }  // end of build_srt_list()
+
 //-----------------------------------------------
 function TOGLIbuild_srt_list() {
 
@@ -1061,13 +1035,31 @@ function onclick_write_srt() {
         numGr = 0;
     
     var v;
-	
+	/***
     for (v = 0; v < list_time_stamp.length; v++) {
 		var str2 = list_text[v] ;
 		if (str2 == "") { continue; }
         numGr += 1;
+		console.log(" onclick_write_srt()" + " v="+v + " numgr=" + numGr + " " + list_time_stamp[v] + " " + str2); 
         srt_txt += numGr + "\n" + list_time_stamp[v] + "\n" + str2 + "\n\n";
     }
+	***/
+	
+	for (v = 0; v < list_time_stamp.length; v++) {
+		var str2 = list_text[v] ;
+		if (str2 == "") { continue; }
+        numGr += 1;
+		var xtime = list_time_stamp[v]; 
+		if ( xtime.substr(0,12) == FAKE_time) {
+			srt_txt += "\n" + str2; 
+			continue;
+		}
+		//console.log(" onclick_write_srt()" + " v="+v + " numgr=" + numGr + " " + xtime + " " + str2); 
+		
+        srt_txt += "\n\n" + numGr + "\n" + list_time_stamp[v] + "\n" + str2 ;
+    }
+	
+	
     if (numGr < 2) {
         return;
     }
@@ -1140,7 +1132,7 @@ function onclick_split_into_rows(nn) {
 
 //-------------------------------------------------
 
-function  get_srt_data_from_text(new_text) { 		
+function  get_srt_data_from_text(new_text, firstTimesecs ) { 		
 
 	var pez1=""; var pez0=""; 
 	
@@ -1148,21 +1140,26 @@ function  get_srt_data_from_text(new_text) {
 	
     var rows = new_text.split("\n");
 	
-	var from1  = 9 * 3600; 
-	var to1    = from1 + 10;   
+	var from1  = firstTimesecs
+	var to1    = 9 * 3600 + 10;    
 	var timeh1 = FAKE_time ;   		
 	var timeh2 = FAKE_time ;   	// FAKE_time2;  
+	var rigaFrom = [], rigaTo=[], rigaTxt=[], idsrt=[]; 
+	if (firstTimesecs > 0) {
 	
-	var rigaFrom = [0];
-	var rigaTo   = [0];
-	var rigaTxt  = [""];
-	var idsrt    = [""]; 
-	function push1( pez1 ) {
-		rigaFrom.push( from1 ); 
-		rigaTo.push( to1 ); 
-		rigaTxt.push(pez1); 
-		idsrt.push( timeh1 + " " + timeh2 ); 				
+	} else {
+		rigaFrom = [ firstTimesecs ];
+		rigaTo   = [0];
+		rigaTxt  = [""];
+		idsrt    = [""]; 		
 	}
+	
+	function push1( pez1 ) {
+			rigaFrom.push( from1 ); 
+			rigaTo.push( to1 ); 
+			rigaTxt.push(pez1); 
+			idsrt.push( timeh1 + " " + timeh2 ); 				
+	}	
 	
 	//-------------------------	
 	for(var z1=0; z1 < rows.length; z1++) {
@@ -1186,14 +1183,21 @@ function  get_srt_data_from_text(new_text) {
 		}
 	} 
 	//--------------------	
-	to1   = from1;
-	from1 = 0; 
-	timeh1= "00:00:00.000"; 
-	timeh2= FAKE_time;  // "09:00:00.000";
-	rigaFrom[1] = from1; 
-	rigaTo[1]   = to1  ; 
-	idsrt[1]    = timeh1 + " " + timeh2; 	
+	console.log("firstTimesecs = " + firstTimesecs ); 
+	if (firstTimesecs <= 0) { 
+		//to1   = from1;
+		to1 = 9 * 3600;  
+		from1 = 0; 
+		timeh1= "00:00:00.000"; 
+		timeh2= FAKE_time;  // "09:00:00.000";
+		rigaFrom[1] = from1; 
+		rigaTo[1]   = to1  ; 
+		idsrt[1]    = timeh1 + " " + timeh2; 	
+	}
 	
+	//console.log("get_srt_data_from_text()  0 = " + rigaFrom[0] + " " + rigaTo[0] + " " +  rigaTxt[0] +" " + idsrt[0]  ) 
+	//console.log("get_srt_data_from_text()  1 = " + rigaFrom[1] + " " + rigaTo[1] + " " +  rigaTxt[1] +" " + idsrt[1]  ) 
+ 
 	return [rigaFrom, rigaTo, rigaTxt, idsrt];  
 	
 } //  get_srt_data_from_text()
@@ -1255,7 +1259,7 @@ function get_srt_dataInput( sw_srt ) {
     var colx;
     var new_text = document.getElementById("id_text1").value;
 	
-	
+	var firstTimesecs = 0;  
 	
 	
 	
@@ -1264,8 +1268,58 @@ function get_srt_dataInput( sw_srt ) {
 	if (sw_srt) {
 		[rigaFrom, rigaTo, rigaTxt, idsrt] = get_subtitle_strdata(new_text);// this function and its container file is copied
 																			// from "Builder"  part of the "ClpByClip" application.
+		/**																	
+		console.log( "out get_subtitle_strdata() rigaFrom=" + rigaFrom.length + " rigaTo=" + rigaTo.length + 
+			" rigaTxt=" + rigaTxt.length+ " idsrt=" + idsrt.length); 	
+		console.log("rigaTo=" + rigaTo); 	
+		**/
+		
+		var posLastRow2 = rigaTxt.length-2; 
+		var lastRow2 = rigaTxt[ posLastRow2 ];
+		
+		//console.log("lastRow2=" + rigaFrom[ rigaTxt.length-2] + " --> " +  rigaTo[ rigaTxt.length-2]  +   " " +  lastRow2 + "\n-------------------\n");  
+		//console.log("lastRow1=" + rigaFrom[ rigaTxt.length-1] + " --> " +  rigaTo[ rigaTxt.length-1]  +   " " + rigaTxt[rigaTxt.length-1] + "\n---");
+	
+	
+		var posLastRow = rigaTxt.length-1; 
+		
+		var lastRow = rigaTxt[ posLastRow ]; // last element
+		
+		//console.log("lastRow=" + lastRow); 
+		
+		var last2row = lastRow.split("\n"); 
+		
+		//console.log( "\nlast2row.length=" + last2row.length + "  XXXXXX " + lastRow.substr(0,200) );
+		
+		if (last2row.length > 2) {
+			var firstTimesecs = rigaFrom[  rigaTo.length-1 ];				
+			
+			//console.log("firstTimesecs=" + firstTimesecs); 
+			
+			var pop1 = rigaFrom.pop();
+			pop1 = rigaTo.pop();
+			pop1 = rigaTxt.pop();
+			pop1 = idsrt.pop();
+			
+			//console.log("last line0=" + rigaFrom[ rigaFrom.length-1] + " " + rigaTo[ rigaTo.length-1] + 
+			//	" " +  rigaTxt[ rigaTxt.length-1] + " " + idsrt[ idsrt.length-1]  + "\n");
+			
+			var rigaFrom2, rigaTo2, rigaTxt2, idsrt2; 	
+			[rigaFrom2, rigaTo2, rigaTxt2, idsrt2] = get_srt_data_from_text( lastRow, firstTimesecs ); 
+			var timeh00 = sec2time(rigaFrom2[0]);
+			idsrt2[0] = timeh00 + idsrt2[0].substring(12); 
+
+			//console.log("first line2=" + rigaFrom2[ 0 ] + " " + rigaTo2[ 0 ] + " " +  rigaTxt2[ 0 ] + " " + idsrt2[ 0 ]  + "\n");
+			
+			rigaFrom = rigaFrom.concat( rigaFrom2 );
+			rigaTo   = rigaTo.concat(   rigaTo2   );
+			rigaTxt  = rigaTxt.concat(  rigaTxt2  );
+			idsrt    = idsrt.concat(    idsrt2    );	
+		}
+		
+																			
 	} else {
-		[rigaFrom, rigaTo, rigaTxt, idsrt] = get_srt_data_from_text(new_text); 
+		[rigaFrom, rigaTo, rigaTxt, idsrt] = get_srt_data_from_text(new_text, firstTimesecs ); 
 	} 	
 	try { 
 		if (rigaFrom === "undefined")  {	
@@ -1304,11 +1358,7 @@ function get_srt_dataInput( sw_srt ) {
         colx = idsrt[x].split(" ");
         timeh1 = colx[0];
         timeh2 = colx[1];
-		/**
-		if (x < 10) {
-			console.log("x="+x + " from=" + from1 + "  to1=" + to1 + "  idsrt[x]=" + idsrt[x] + "   txt=" + txt1 );
-		}
-		**/
+		
 
         allrows2 += elab_row_fromsrt(x, from1, to1, timeh1, timeh2, txt1);
     }
@@ -1575,7 +1625,6 @@ function handleFiles(ele_inp1, id_to_elem1, src_value_inner, fun_after_drop1, id
 		//c onsole.log("tipo SRT  sw_type_input_srt=" + sw_type_input_srt ); 
     }
 	
-
     if (is_toElem_tagName_compatible_type_file(to_elem1, type_file) == false) {
         var msgfile1 = "<span style='color:blue;'>" + filename00 + "</span>";
         document.getElementById(id_error1).innerHTML = type_file + "<br>" + msgfile1 + "<br>" + document.getElementById("m302").innerHTML + "<hr><br>"; // incompatible
@@ -1869,6 +1918,10 @@ ele_InputVideo.onchange = function(event) {
         document.getElementById("id_msg1").style.color = "red";
 		return;  
 	}
+	
+	if (typeFile.indexOf("audio") >= 0) {
+		document.getElementById("id_myVideo").style.height = "3em"; 
+	} 
 
 	let file = event_target_file;
 	let blobURL = URL.createObjectURL(file);
