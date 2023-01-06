@@ -162,6 +162,9 @@ function get_messages() {
 		<Sm326>seconds ahead of separation time </Sm326>		
 		<Sm327>end playback </Sm327>
 		<Sm328>seconds after the separation time</Sm328>
+		<Sm330>Time</Sm330>
+		<Sm331>end of Play left <br> and start of Play right </Sm331>
+		<Sm332>seconds</Sm332>
 		
 	</lang_en>	
 		
@@ -265,6 +268,10 @@ function get_messages() {
 		<Sm326>secondi prima del tempo</Sm326>		
 		<Sm327>termina Play</Sm327> 
 		<Sm328>secondi dopo il tempo</Sm328>
+		<Sm330>Tempo</Sm330>
+		<Sm331>di fine Play sinistra <br>e inizio di Play destra</Sm331>
+		<Sm332>secondi</Sm332>
+		
 	</lang_it>
 </messages>	
 `; // end of xml_text ( ` alt + 96 )

@@ -83,24 +83,14 @@
 		 
 		 
          <div id="id_div20"  class="center" style="width:100%;display:none;height:100%; border:0px solid black;" >
+	<div id="id_div20_2"    class="center" style="width:100%;display:block; border:0px solid red;" >	 
             <div id="id_video_time"  class="center" style="text-align:center;width:98%;height:auto"></div>
             <div id="id_video_sub"   class="center" style="color:blue;font-size:1.4rem;text-align:center;background-color:yellow;"></div>
             <div id="id_dummy_sub"><br>&nbsp;</div>
-            <!-- <br><b><span id="id_hb1" style="font-size:1.2rem;">?001Build an srt file from a text and a video or audio file</span></b> -->
-			
-			
+           	
             <div id="id_div_head1"  class="center" style="display:flex; border:0px solid red;">
 				
-				<button id="m304" class="button" style="margin:auto; text-align:center; vertical-align:top;" onclick="onclick_show_what()">What to do</button> 
-				<!--
-				<div  class="center"  style="vertical-align:middle;text-align:center;">
-					<span id="id_spltStopM0"><span id="m322">stop playback after split</span></span>
-					<br>
-					<input type="radio" name="spltStop" id="id_spltStopY" checked><span id="id_spltStopMY"><span id="m324">Yes</span></span>   
-					&nbsp; &nbsp; &nbsp; 
-					<input type="radio" name="spltStop" id="id_spltStopN" ><span id="id_spltStopMN"><span id="m323">No</span></span>
-				</div>	
-				-->
+				<button id="m304" class="button" style="margin:auto; text-align:center; vertical-align:top;" onclick="onclick_show_what()">What to do</button> 				
 				<button id="m063" style="margin:auto; text-align:center;" class="button" onclick="onclick_pauseContinue(this)" >Stop/Continue</button>
 			  
                <div id="id_div_speed"  class="center"  style="width:15em;font-size:0.8;">
@@ -139,7 +129,7 @@
 				<span id="m004">input srt error</span>
 			</div>
 			
-			
+	</div>		
 				
 			<div id="id_div_p_text" style="width:100%; height:80%; margin:auto; border: 1px solid black;padding:0.4rem 0 1rem 0;">
 				<div id="id_div_p_head"><span id="m315">
@@ -154,20 +144,19 @@
 			</div>
             <!-- ricerca del momento esatto di separazione di due parole contigue  --> 
            
-			<hr>
-      <div id="id_div_cut" class="w_p_100 txt_center border1 marg_auto" style="display:none;height:100%; padding:0.4em 0 1em 0;     ">
-	 
-      <div id="id_slider_separ_time">
+      <div id="id_div_cut" class="w_p_100 txt_center border1 marg_auto" style="display:none;height:100%; padding:1em 0 1em 0;     ">
+	
+      <div id="id_slider_separ_time"  style="padding:0;">
       <div style="display:none;">called by 'onclick_hideShowSlider(ele_caller)'</div>
-      <div id="n00"  class="marg_auto w_p_100" >
+      <div id="n00"  class="marg_auto w_p_100"  style="padding:0;" >
 
          <div id="input_timeslider" style="display:none;"></div>
-         <br>         
       </div>
-      <div id="nascondi" class="marg_auto txt_center w_p_100  center"  style="display:block;width:95%;border:0px solid black;">
-		
+	  
+      <div id="nascondi" class="marg_auto txt_center w_p_100  center"  style="display:block;width:95%;">
+	
 		<div class="w_p_100 d_flex flex_space_around"  style="border:0px solid red;">  		
-            <div class="txt_right"  style="border:1px solid green;width:35%;padding-top:0.5em;" >
+            <div class="txt_right"  style="border:1px solid green;width:35%;padding:0.5em;" >
 				
                <span class="txt_left">...&nbsp;</span>	
                <span id="idword_left" class="txt_right"> Hi!   &nbsp;  Ihr  kennt  euch?  </span>				  
@@ -196,17 +185,17 @@
             </div>			
 			<div class="txt_center	w_p_10" style="border:1px solid black;margin:0 1em;01em;width:20%;">	
 				
-				   <span id="m0701">Tempo</span> <b>T</b><br>
-				   <span id="m0702" style="font-size:0.8em;">di fine Play sinistra <br>e inizio di Play destra</span>
+				   <span id="m330">Tempo</span> <b>T</b><br>
+				   <span id="m331" style="font-size:0.8em;">di fine Play sinistra <br>e inizio di Play destra</span>
 				   <br>
 				   <br>
-				   <span id="id_cut_point"  class="c_changeCutVal">17,342</span>  secondi
+				   <span id="id_cut_point"  class="c_changeCutVal">17,342</span>&nbsp;<span id="m332">secondi/span>
 				   <br>
 				   <span id="id_cut_point_HHMMSS">00:00:17,341</span>
 				
             </div>
 		
-            <div class="txt_left" style="border:1px solid green;width:35%;padding-top:0.5em;" >	
+            <div class="txt_left" style="border:1px solid green;width:35%;padding:0.5em;" >	
 				
                <span id="idword_right" class="txt_left"> &nbsp;  Ja,  ich  helfe  manchmal  im </span> 
                <span class="txt_left">&nbsp;...</span>	
@@ -249,41 +238,7 @@
 		<br>
 	 
       <div class="border1 w_p_95 center">
-		<!--
-         <div id="id_0linkLineDiv"  style="display:none;" class="w_p_100 d_flex flex_justAlignCenter st19" >
-            <div id="id_0left_linkLine"  class="txt_right" ></div>
-            <div id="id_0middleLink" ></div>
-            <div id="id_0right_linkLine" class="txt_left"></div>
-         </div>
 		
-         <div id="inputRangeDiv"   class="marg_auto txt_center w_p_100 d_flex flex_justAlignCenter" 
-				style=" display:none;  background: linear-gradient(to right, white 0%, white 25%, lightgrey 25%, lightgrey 75%, white 75%);"
-				>
-            <div class="w_p_100 pad0mar0">
-               <input id="id_inpRngFrom" type="range"  min="0"  max="100" value="50" class="rovescio w_p_100 pad0mar0" 
-					oninput="oninput_getInpValueLR()" >	
-            </div>
-            <div class="w_p_100 pad0mar0" >
-               <input id="id_inpRngTo"   type="range"  min="0"  max="100" value="50"  class="dritto w_p_100 pad0mar0"  
-					oninput="oninput_getInpValueLR()" >			
-            </div>
-         </div>
-         <div id="id_linkLineDiv"  style="display:none;"    class="marg_auto txt_center w_p_100 d_flex flex_justAlignCenter" >
-            <div id="id_left_linkLine"  class="cl_left txt_center w_p_50 pad0mar0 height_5em" >
-            </div>
-            <div id="id_middleLink" class="txt_center height_5em" >
-               <div id="id_m_1"></div>
-               <div id="id_m_2"></div>
-               <div id="id_m_3">secondi</div>
-			   <br>
-			   <div id="id_wordsXsecs"  style="display:none;"></div>
-            </div>
-            <div id="id_right_linkLine" class="cl_right txt_center w_p_50 height_5em" >				
-            </div>
-         </div>
-		 -->
-		 
-		 
          <div id="z1"  class="d_flex  flex_justAlignCenter w_p_100 border1 bg_color_lgrey" >
             <div class="w_p_100">
                <input id="id_loopCursor" type="range" min="0" max="400" step="0.001"   value="0" 
