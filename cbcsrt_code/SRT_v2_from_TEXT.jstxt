@@ -477,20 +477,12 @@ var video_src_filename = "";
 
 
 //--------------------------------
-
+let ele_div20_2           = document.getElementById("id_div20_2"); 
+let ele_div_head1         = document.getElementById("id_div_head1"); 
 let ele_slider_separ_time = document.getElementById("id_slider_separ_time"); 
 //-------------------------------------------------
 var cutCursor = '<span class="cutSliderImg">&nbsp;&nbsp;</span>';  
-//------------------------------------------
-function TOGLIfun_after_drop_uno() {
-	if (sw_file_video_ready) {
-		video_setting2("1 fun_after_drop_uno()" );
-	} else {
-		missing_file_msg(2); 
-	}
-   
 
-} // end of fun_after_drop_uno
 
 //-----------------------
 
@@ -1779,7 +1771,9 @@ function resetAndGoBack() {
 	}
 	var pos_id = "w" + num_id;	
 	
-	document.getElementById("id_div_head1").style.display = "flex";
+	ele_div20_2.style.display = "block";
+	
+	ele_div_head1.style.display = "flex";
 	
 	document.getElementById( "id_div_cut"   ).style.display = "none"; 
 	document.getElementById( "id_div_p_text").style.display = "block"; 
@@ -1825,8 +1819,8 @@ function confirmCutTime() {
 		num_id = num_id - 1;
 	}
 	var pos_id = "w" + num_id;	
-	
-	document.getElementById("id_div_head1").style.display = "flex";
+	ele_div20_2.style.display = "block";
+	ele_div_head1.style.display = "flex";
 	
 	document.getElementById( "id_div_cut"   ).style.display = "none"; 
 	document.getElementById( "id_div_p_text").style.display = "block"; 
@@ -2453,47 +2447,7 @@ function TOGLIonclick_centerTheCursor() {
 	
 } // end of TOGLIonclick_centerTheCursor()
 //-------------------------------------------------------
-function TOGLIonclick_hideShowSlider1(ele_caller, typesrt="", srt_num_id="", srt_time_to_secs="", srt_time_to_hhmmss="") {
-			
-	if (ele_slider_separ_time.style.display == "block") {
-		ele_slider_separ_time.style.display = "none"; 
-		return;
-	}	
-	
-	ele_slider_separ_time.style.display = "block";
-	
-	ele_slider_separ_time.scrollIntoView();
-	
-	play_videoFC_cut_time = srt_time_to_secs;
-	
-	var word_pre = ""; var word_next = "";
-	var num_id = parseInt( srt_num_id ); 
-	var v1, ww1;
-	for(v1=num_id - 5; v1<num_id; v1++) {     	
-		ww1 = document.getElementById("w" + v1 );
-		if (ww1) { word_pre += " " + ww1.innerHTML; }
-	}
-	for(v1=num_id; v1<=num_id+5; v1++) {     	
-		ww1 = document.getElementById("w" + v1 );
-		if (ww1) { word_next += " " + ww1.innerHTML; }
-	}    
-	
-    document.getElementById("idword_left").innerHTML  = word_pre;
-    document.getElementById("idword_right").innerHTML = word_next;
 
-	document.getElementById("id_caller_num_id").innerHTML = num_id;  
-
-    document.getElementById("input_timeslider").innerHTML = play_videoFC_cut_time; 
-	
-	//var wordsPerSecond = (num_id / play_videoFC_cut_time).toFixed(1); 
-	//console.log( wordsPerSecond + " words per second  (" + play_videoFC_cut_time + " seconds, " + num_id + " words)" )  ;   	
-	//document.getElementById("id_wordsXsecs").innerHTML = wordsPerSecond + " words/second";  
-	
-	onclick_separ_reset() ;
-	
-
-} // end of TOGLIonclick_hideShowSlider1()
-//------------------------
 //-------------------------------------------------------
 function onclick_hideShowSlider2(ele_caller, typesrt="", srt_num_id="", srt_time_to_secs="", srt_time_to_hhmmss="") {
 			
@@ -2503,6 +2457,7 @@ function onclick_hideShowSlider2(ele_caller, typesrt="", srt_num_id="", srt_time
 	}	
 	
 	ele_slider_separ_time.style.display = "block";
+	ele_div20_2.style.display = "none";
 	
 	ele_slider_separ_time.scrollIntoView();
 	
