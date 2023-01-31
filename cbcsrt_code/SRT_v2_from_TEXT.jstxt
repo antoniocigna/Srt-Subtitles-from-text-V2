@@ -556,7 +556,7 @@ function video_setting2(where) {
 //--------------------------------------------
 
 function split_at_dot(text1) {
-    var newText = text1.trim().replaceAll(". ", ". \n").replaceAll(" \n", "\n").replaceAll("\n\n", "\n");
+    var newText = ("_. " + text1.trim()).replaceAll(". ", ". \n").replaceAll(" \n", "\n").replaceAll("\n\n", "\n");
     return newText;
 }
 
