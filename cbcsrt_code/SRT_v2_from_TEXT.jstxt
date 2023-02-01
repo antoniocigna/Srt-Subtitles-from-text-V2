@@ -1699,7 +1699,7 @@ function changeVideoSpeed_gen1(this1) {
 	var val1 =  parseFloat(this1.value);
 	if (val1  < minimum_speed) { 
 		val1 = minimum_speed; 
-		this1.value= val1;
+		this1.value = val1;
 	}	
 	try{
 		vid.playbackRate = val1; 		
@@ -1807,11 +1807,11 @@ function confirmCutTime() {
 	
 	
 	
-	ele_input.value     = document.getElementById( "id_cut_point_HHMMSS" ).innerHTML; 
+	ele_input.value = ele_cut_point_HHMMSS.innerHTML.replace(",","."); 
 	
 	highlight_last_row( ele_input, num_id, 2 ); 
 	
-	ele_time.innerHTML  = document.getElementById( "id_cut_point_HHMMSS" ).innerHTML  + "=" + document.getElementById( "id_cut_point" ).innerHTML;
+	ele_time.innerHTML  = ele_cut_point_HHMMSS.innerHTML  + "=" + document.getElementById( "id_cut_point" ).innerHTML;
 	
     sw_search_of_word_cut = false;
 	
@@ -2324,7 +2324,7 @@ function changeVideoSpeed_loop3(this1) {
 	var val1 =  parseFloat(this1.value);
 	if (val1  < minimum_speed) { 
 		val1 = minimum_speed; 
-		this1.value= val1;
+		this1.value = val1;
 	}
 	try{		
 		vid.playbackRate = val1; 		
