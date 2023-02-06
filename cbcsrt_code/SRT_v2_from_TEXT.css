@@ -401,5 +401,14 @@ html {
 	font-size:1.0em;
 	width:1.1em; height:1.1em;
 }	
-   
-       
+.c_millsCh{	 
+	font-size:1em;	
+	min-width:4em;
+	font-family: monospace; 
+	text-align:center;
+	font-color:green; 
+}   
+.c_speaker{
+	margin-left:1em;	
+	
+}       

@@ -14,22 +14,13 @@ var FAKE_time  = "09:00:00.000";
 var FAKE_time2 = "09:00:10.000"; 
 
 var minimum_speed = 0.07;
+var milliseconds_per_char = 100;  // calculated every "onclick_precisionCut3(this)"  (magnifyingGlass)  
 
-	var ele_inpRngFrom     = document.getElementById("id_inpRngFrom");
-	var ele_inpRngTo     = document.getElementById("id_inpRngTo");
+var ele_inpRngFrom     = document.getElementById("id_inpRngFrom");
+var ele_inpRngTo     = document.getElementById("id_inpRngTo");
 
-
-//var ele_left_linkLine   = document.getElementById("id_left_linkLine" );
-//var ele_0left_linkLine  = document.getElementById("id_0left_linkLine" );
-
-
-
-//var ele_right_linkLine  = document.getElementById("id_right_linkLine" );
-//var ele_0right_linkLine  = document.getElementById("id_0right_linkLine" );
-
-
-//var ele_middleLink  = document.getElementById("id_middleLink"); 
-//var ele_0middleLink = document.getElementById("id_0middleLink"); 
+var sw_line_can_be_broken = true; 
+onclick_can_breakLine(sw_line_can_be_broken);
 //-------------------------------------------
 	
 	
@@ -433,7 +424,7 @@ var magnifyingGlass_symb = "&#128270;";
 var speakinghead_symb = "<span>" + document.getElementById("id_symb_speakinghead").innerHTML + "</span>"; //    '<span>&#128483;</span>' ;
 var sunrise_symb = "<span>" + document.getElementById("id_symb_sunrise").innerHTML + "</span>"; //    "<span>&#127748;</span>"
 var sunset_symb  = "<span>" + document.getElementById("id_symb_sunset").innerHTML + "</span>"; //    "<span>&#127751;</span>"
-
+var millOverChar_symb = "ms/c";
 var start_text_symb = sunrise_symb;
 var end_text_symb   = sunset_symb;
 
@@ -612,10 +603,10 @@ function onclick_row_join(this1, num_wordX) {
 		<button id="w23" class="but_word" onclick="onclick_rowsplit(this, 23)" ondblclick="onclick_row_join(this, 23 )">aufgerufen. </button>
 		<span>
 			<br id="wbr24">
-			<button id="ra24" class="button" onclick="onclick_playFrom(this)"><span>🗣</span></button>
 			<button id="rc24" class="button" onclick="onclick_precisionCut3(this)">🔎</button> 
 			<input id="ri24" type="time" value="00:00:29.677" step="0.001">
-			<span id="rt24" style="display:none">00:00:29,677 = 29.677641</span>
+			<span id="rt24" style="display:none">00:00:29,677 = 29.677641</span>			
+			<button id="ra24" class="button c_speaker" onclick="onclick_playFrom(this)"><span>🗣</span></button>
 		</span>
 		<button id="w24" class="but_word" onclick="onclick_rowsplit(this, 24)" ondblclick="onclick_row_join(this, 24 )">Die </button>
 		-----------  or -------	
@@ -643,7 +634,7 @@ function onclick_row_join(this1, num_wordX) {
 
 function build_row_button(where, id_num, timesec1, timeHHMMSS) {
 	
-	var newLine = '\n\n<span id="row' + id_num + '"  >' +  '\n\t<br id="wbr' +  id_num + '">' ;
+	var newLine = '\n\n<span id="row' + id_num + '" class="c_row">' +  '\n\t<br id="wbr' +  id_num + '">' ;
 	var disabled = '';
 	var time_wr_color = ''; 
 	
@@ -660,12 +651,13 @@ function build_row_button(where, id_num, timesec1, timeHHMMSS) {
 		var id_row_i = "ri" + id_num;
 		var id_row_t = "rt" + id_num;
 		newLine += "" + 	
-			'\n\t<button id="' + id_row_a + '" class="button" onclick="onclick_playFrom(this)"      ' + disabled + '>' + speakinghead_symb + '</button>' +
 			'\n\t<button id="' + id_row_c + '" class="button" onclick="onclick_precisionCut3(this)" ' + disabled + '>' + magnifyingGlass_symb + '</button> ' +
 			'\n\t<input  id="' + id_row_i + '" type="time" value="' + timeHHMMSS.replace(",", ".") + '" step="0.001" ' +  time_wr_color  + ' >' +
-			'\n\t<span   id="' + id_row_t + '" style="display:none">' + timeHHMMSS + " = " + timesec1 + '</span>' ;
+			'\n\t<span   id="' + id_row_t + '" style="display:none">' + timeHHMMSS + " = " + timesec1 + '</span>' +			
+			'\n\t<button id="' + id_row_a + '" class="button  c_speaker" onclick="onclick_playFrom(this)"      ' + disabled + '>' + speakinghead_symb + '</button>' +
+			''; 
 	}	
-	newLine += '\n</span>';
+	newLine += '\n</span>\n';
 
     return newLine;
 
@@ -727,6 +719,7 @@ function onclick_rowsplit(this1, num_wordX) {
 		}
 	}
 	**/
+	
 	
 } // end of onclick_rowsplit() 
 
@@ -872,79 +865,18 @@ function build_srt_list() {
 }  // end of build_srt_list()
 
 //-----------------------------------------------
-function TOGLIbuild_srt_list() {
 
-	//c onsole.log("build_srt_list()" );
-	
-    list_time_stamp = [];
-    list_time_from_secs = [];
-    list_time_to_secs = [];
-	
-	var PR = getBuilderMark(); 
-	
-    list_text = [PR];
-    var time_to, time_to_hhmmss, time_to_secs, time_from_hhmmss, time_from_secs, time_from; 
-
-    time_from_hhmmss = "00:00:00,000";
-    time_from_secs = 0.0;
-    txtGr = "";
-    
-   
-    
-	var butwords = document.getElementById("id_p_text").children;
-	
-	var begX = 0; 
-	
-	var rc =0;
-	var last_x = butwords.length;
-	for (var x = begX; x < last_x; x++) {
-	
-        var child1 = butwords[x];
-		
-		console.log("build_srt_list() child1=" + child1.outerHTML ); 
-		
-		if (child1.tagName == "SPAN") {		
-			
-			time_to = get_time( child1.outerHTML ); 
-			if (time_to == null) { continue; }
-				
-			
-            time_to_hhmmss = time_to[0].trim();
-            time_to_secs =  parseFloat( time_to[1]);	
-			
-			rc = push_gr_srt(time_from_hhmmss, time_to_hhmmss, time_from_secs, time_to_secs, txtGr);
-			if (rc < 0) { 
-				last_x = -1 ;
-				break;
-			} 
-            time_from_hhmmss = time_to_hhmmss;
-            time_from_secs = time_to_secs;
-            txtGr = "";
-            continue;
-			
-			
-		} else {
-			txtGr += child1.innerHTML;
-		}		
-	}
-	
-	
-	if (last_x > 0) {
-		time_to_hhmmss = sec2time(vid.duration).replace(".", ",");
-		time_to_secs = vid.duration;
-		push_gr_srt(time_from_hhmmss, time_to_hhmmss, time_from_secs, time_to_secs, txtGr);
-	}
-  		
-} // end of  TOGLIbuild_srt_list() 	
-//---------------------------------------------------------	
-
-//-------------------
 function onclick_playFrom(this1) {
 	// function called by    build_row_button()
 
-	//c onsole.log("srt onclick_playFrom()"); 
-    var next_butt_ele = this1.nextElementSibling;
-    var next_input_ele = next_butt_ele.nextElementSibling;
+	//console.log("srt onclick_playFrom() " + this1.id); 
+	
+	var input_id = this1.id.replace("ra","ri"); 
+	
+    //var next_butt_ele = this1.nextElementSibling;
+    //var next_input_ele = next_butt_ele.nextElementSibling;
+	var next_input_ele = document.getElementById( input_id ); 
+	
     if (next_input_ele.tagName == "INPUT") {
         var timeHHMMSS = next_input_ele.value; // hh:mm:ss.mmm; 
         var timeHHMMSS_tt2 = timeHHMMSS.split(":");
@@ -961,6 +893,8 @@ function onclick_playFrom(this1) {
 //---------------------
 
 function fun_playFrom2(thisInput, time_secs) {
+	//console.log("fun_playFrom2( " + thisInput.id + " time_secs=" + time_secs);
+
 	sw_wordPlayLoop = false; 
     const input_collection = document.getElementsByTagName("INPUT");
 
@@ -1094,20 +1028,16 @@ function onclick_split_into_rows(nn) {
     //text1 = zeroLine + '\n' + text1;
 
     document.getElementById("id_msg2").innerHTML = "";
-
-    var newText = text1.replaceAll(". ", ". \n").replaceAll(" \n", "\n").replaceAll("\n\n", "\n");
+	var newText;
+    if (sw_line_can_be_broken) {
+		newText = text1.replaceAll(". ", ". \n").replaceAll(" \n", "\n").replaceAll("\n\n", "\n");
+	} else {
+		newText = text1.replaceAll(" \n", "\n").replaceAll("\n\n", "\n");
+	}
     document.getElementById("id_text1").innerHTML = newText.trim();
 	
 	get_srt_dataInput( sw_type_input_srt );
-    
-	/***
-	if (sw_type_input_srt) {
-        copy_textarea_srt();
-    } else {
-        copy_textarea();
-    }
-	**/
-	
+    	
     sw_file_text_ready = true;
 
     if (sw_file_video_ready) {
@@ -1116,8 +1046,6 @@ function onclick_split_into_rows(nn) {
     } else {
 		missing_file_msg(4); 
     }
-
-
 
 } // end of onclick_split_into_rows()
 
@@ -1145,34 +1073,40 @@ function  get_srt_data_from_text(new_text, firstTimesecs ) {
 		rigaTxt  = [""];
 		idsrt    = [""]; 		
 	}
-	
+	//-----------------------------
 	function push1( pez1 ) {
 			rigaFrom.push( from1 ); 
 			rigaTo.push( to1 ); 
 			rigaTxt.push(pez1); 
 			idsrt.push( timeh1 + " " + timeh2 ); 				
-	}	
+	}		
+	//----------------------------
+	function words_from_one_line(rowOne) { 
+		if (sw_line_can_be_broken) {
+			var woFS = rowOne.split(". ");
+			for(var zx=0; zx < woFS.length; zx++) {  
+				var wo = woFS[zx].split(" "); 		
+				pez1=""; pez0="";
+				for(var z2=0; z2 < wo.length; z2++) {
+					pez0 += wo[z2] + " "; 
+					if (pez0.length > lenRowMax) {
+						push1( pez0 ); 
+						pez0=""; 		
+					}				
+				}
+			}
+			if (pez0 != "") {
+				push1( pez0 ); 
+				pez0=""; 	pez1 = pez0;				 
+			}
+		} else {
+			push1( rowOne); 
+		}	
+	} // end of  words_from_one_line()
 	
 	//-------------------------	
 	for(var z1=0; z1 < rows.length; z1++) {
-		var rowOne = rows[z1] ;
-		
-		var woFS = rowOne.split(". ");
-		for(var zx=0; zx < woFS.length; zx++) {  
-			var wo = woFS[zx].split(" "); 		
-			pez1=""; pez0="";
-			for(var z2=0; z2 < wo.length; z2++) {
-				pez0 += wo[z2] + " "; 
-				if (pez0.length > lenRowMax) {
-					push1( pez0 ); 
-					pez0=""; 		
-				}				
-			}
-		}
-		if (pez0 != "") {
-			push1( pez0 ); 
-			pez0=""; 	pez1 = pez0;				 
-		}
+		words_from_one_line( rows[z1] ); 		
 	} 
 	//--------------------	
 	console.log("firstTimesecs = " + firstTimesecs ); 
@@ -1187,9 +1121,6 @@ function  get_srt_data_from_text(new_text, firstTimesecs ) {
 		idsrt[1]    = timeh1 + " " + timeh2; 	
 	}
 	
-	//console.log("get_srt_data_from_text()  0 = " + rigaFrom[0] + " " + rigaTo[0] + " " +  rigaTxt[0] +" " + idsrt[0]  ) 
-	//console.log("get_srt_data_from_text()  1 = " + rigaFrom[1] + " " + rigaTo[1] + " " +  rigaTxt[1] +" " + idsrt[1]  ) 
- 
 	return [rigaFrom, rigaTo, rigaTxt, idsrt];  
 	
 } //  get_srt_data_from_text()
@@ -1208,12 +1139,13 @@ function elab_row_fromsrt(index, from1, to1, timehh_from, timehh_to, srt_txt) {
 
 	---------------
 	intermediate output: 
-	<span id="row2">
+	<span id="row2" class="c_row">
 		<br id="wbr2">
-		<button id="ra2" where="1" class="button" onclick="onclick_playFrom(this)"><span>🗣</span></button>
 		<button id="rc2" class="button" onclick="onclick_precisionCut3(this)">🔎</button> 
+		<button id="rs2" class="button" onclick="onclick_getMsecOverChar(this)">ms/c</button> 
 		<input id="ri2" type="time" value="00:00:16.227" step="0.001">
-		<span id="rt2" style="display:none">00:00:16,227 = 16.227438</span>
+		<span id="rt2" style="display:none">00:00:16,227 = 16.227438</span>		
+		<button id="ra2" where="1" class="button" onclick="onclick_playFrom(this)"><span>🗣</span></button>
 	</span>
 	<button id="w2" class="but_word" onclick="onclick_rowsplit(this, 2)" ondblclick="onclick_row_join(this, 2 )">one </button>
 	<button id="w3" class="but_word" onclick="onclick_rowsplit(this, 3)" ondblclick="onclick_row_join(this, 3 )">two </button>
@@ -1229,7 +1161,12 @@ function elab_row_fromsrt(index, from1, to1, timehh_from, timehh_to, srt_txt) {
 	var startRow = build_row_button(2, (num_word_id + 1), from1, timehh_from);
 	isPlaying = false;
 	
-    var newriga1 = split_in_words(srt_txt).trim(); //<===
+	var newriga1;	
+	if (sw_line_can_be_broken) {
+		newriga1 = split_in_words(srt_txt).trim(); 
+	} else {
+		newriga1 = only_one_word(srt_txt).trim(); 
+	}	
 	
 	var ret = startRow + newriga1;
 	
@@ -1241,9 +1178,7 @@ function elab_row_fromsrt(index, from1, to1, timehh_from, timehh_to, srt_txt) {
 //--------------------------------------
 function get_srt_dataInput( sw_srt ) {
 
-	document.getElementById("id_srt_err").style.display = "none" ;
-	
-	//c onsole.log("copy_textarea_srt()  ");
+	document.getElementById("id_srt_err").style.display = "none" ;	
 	
     // input srt  ( because we want to verify and correct it)
     var rigaFrom, rigaTo, rigaTxt, idsrt;
@@ -1252,95 +1187,69 @@ function get_srt_dataInput( sw_srt ) {
     var new_text = document.getElementById("id_text1").value;
 	
 	var firstTimesecs = 0;  
+	//------------------------------
+	function isError() {  
+		try { 
+			if (rigaFrom === "undefined")  {	
+				console.log("error1  in 'copy_textarea_srt()'" + " rigaFrom undefined");
+				return;
+			}
+			if (typeof rigaFrom === "undefined")  {
+				console.log("error2  in 'copy_textarea_srt()'" + " rigaFrom object undefined");
+				return;
+			}
+			if (typeof rigaFrom == "object") {
+				if (rigaFrom.length < 2) {	
+					document.getElementById("id_srt_err").style.display = "block" ; // srt file missing or in error 
+					return;  
+				}
+			} else {
+				document.getElementById("id_srt_err").style.display = "block" ; // srt file missing or in error  
+				return ;
+			} 
+		} catch(e1) {
+			console.log("error3 in 'copy_textarea_srt()' " + e1);
+			return;
+		} 
+	} // end of isError()
 	
-	
-	
-	
-
-	if (sw_srt) {
+	//------------------------------------------
+	function fun_srt1() {
 		[rigaFrom, rigaTo, rigaTxt, idsrt] = get_subtitle_strdata(new_text);// this function and its container file is copied
-																			// from "Builder"  part of the "ClpByClip" application.
-		/**																	
-		console.log( "out get_subtitle_strdata() rigaFrom=" + rigaFrom.length + " rigaTo=" + rigaTo.length + 
-			" rigaTxt=" + rigaTxt.length+ " idsrt=" + idsrt.length); 	
-		console.log("rigaTo=" + rigaTo); 	
-		**/
-		
+																			// from "Builder"  part of the "ClpByClip" application.	
 		var posLastRow2 = rigaTxt.length-2; 
-		var lastRow2 = rigaTxt[ posLastRow2 ];
-		
-		//console.log("lastRow2=" + rigaFrom[ rigaTxt.length-2] + " --> " +  rigaTo[ rigaTxt.length-2]  +   " " +  lastRow2 + "\n-------------------\n");  
-		//console.log("lastRow1=" + rigaFrom[ rigaTxt.length-1] + " --> " +  rigaTo[ rigaTxt.length-1]  +   " " + rigaTxt[rigaTxt.length-1] + "\n---");
-	
-	
-		var posLastRow = rigaTxt.length-1; 
-		
+		var lastRow2 = rigaTxt[ posLastRow2 ];			
+		var posLastRow = rigaTxt.length-1; 		
 		var lastRow = rigaTxt[ posLastRow ]; // last element
-		
-		//console.log("lastRow=" + lastRow); 
-		
 		var last2row = lastRow.split("\n"); 
-		
-		//console.log( "\nlast2row.length=" + last2row.length + "  XXXXXX " + lastRow.substr(0,200) );
-		
+				
 		if (last2row.length > 2) {
 			var firstTimesecs = rigaFrom[  rigaTo.length-1 ];				
-			
-			//console.log("firstTimesecs=" + firstTimesecs); 
-			
 			var pop1 = rigaFrom.pop();
 			pop1 = rigaTo.pop();
 			pop1 = rigaTxt.pop();
 			pop1 = idsrt.pop();
-			
-			//console.log("last line0=" + rigaFrom[ rigaFrom.length-1] + " " + rigaTo[ rigaTo.length-1] + 
-			//	" " +  rigaTxt[ rigaTxt.length-1] + " " + idsrt[ idsrt.length-1]  + "\n");
-			
+						
 			var rigaFrom2, rigaTo2, rigaTxt2, idsrt2; 	
 			[rigaFrom2, rigaTo2, rigaTxt2, idsrt2] = get_srt_data_from_text( lastRow, firstTimesecs ); 
 			var timeh00 = sec2time(rigaFrom2[0]);
 			idsrt2[0] = timeh00 + idsrt2[0].substring(12); 
-
-			//console.log("first line2=" + rigaFrom2[ 0 ] + " " + rigaTo2[ 0 ] + " " +  rigaTxt2[ 0 ] + " " + idsrt2[ 0 ]  + "\n");
-			
+		
 			rigaFrom = rigaFrom.concat( rigaFrom2 );
 			rigaTo   = rigaTo.concat(   rigaTo2   );
 			rigaTxt  = rigaTxt.concat(  rigaTxt2  );
 			idsrt    = idsrt.concat(    idsrt2    );	
-		}
-		
-																			
+		}		
+	} // end of fun_srt1()
+	//-----------------------------
+	if (sw_srt) {
+		fun_srt1();		
 	} else {
 		[rigaFrom, rigaTo, rigaTxt, idsrt] = get_srt_data_from_text(new_text, firstTimesecs ); 
 	} 	
-	try { 
-		if (rigaFrom === "undefined")  {	
-			console.log("error1  in 'copy_textarea_srt()'" + " rigaFrom undefined");
-			return;
-		}
-		if (typeof rigaFrom === "undefined")  {
-			console.log("error2  in 'copy_textarea_srt()'" + " rigaFrom object undefined");
-			return;
-		}
-		if (typeof rigaFrom == "object") {
-			if (rigaFrom.length < 2) {	
-				document.getElementById("id_srt_err").style.display = "block" ; // srt file missing or in error 
-				return;  
-			}
-		} else {
-			document.getElementById("id_srt_err").style.display = "block" ; // srt file missing or in error  
-			return ;
-		} 
-	} catch(e1) {
-		console.log("error3 in 'copy_textarea_srt()' " + e1);
-		return;
-	} 
-	
+	if (isError()) return; 
 
-	var allrows2 = "";    
-    
-	
-	
+	var allrows2 = head_button();     
 	
 	//----------------
     for (var x = 1; x < rigaFrom.length; x++) {
@@ -1350,8 +1259,6 @@ function get_srt_dataInput( sw_srt ) {
         colx = idsrt[x].split(" ");
         timeh1 = colx[0];
         timeh2 = colx[1];
-		
-
         allrows2 += elab_row_fromsrt(x, from1, to1, timeh1, timeh2, txt1);
     }
 	
@@ -1359,32 +1266,23 @@ function get_srt_dataInput( sw_srt ) {
 	from1=to1;
 	var timehh_from = timeh2;
 	
-	/**
-	var sw_disable = false;	
-	if (sw_srt == false) {
-		if (num_word_id > 0) {
-		sw_disable = true ;	
-		}
-	}
-	**/
-	
 	var startRow = build_row_button(3, (num_word_id + 1), from1, timehh_from);
 	isPlaying = false;
 	allrows2 += startRow;
-	//allrows2 += make_word_button(end_text_symb + "", " ");
-	allrows2 += make_word_button("&nbsp;", " ");
+	if (sw_line_can_be_broken) allrows2 += make_word_button("&nbsp;", " ");
+	else  allrows2 += only_one_word("&nbsp;");
 	
     document.getElementById("id_p_text").innerHTML = allrows2;
-
+		
+	console.log("??anto? allrows2 =\n" +allrows2.substring(0,500)); 
 
 } // end of get_srt_dataInput()
 
 // ========================================================
 
-
-
 //-------------------------------------------
 function make_word_button(word1, wSeparString) {
+
     var newword;
     if (word1 == "") {
         if (wSeparString == "") {
@@ -1408,8 +1306,24 @@ function make_word_button(word1, wSeparString) {
     return newword;
 
 } // end of make_word_button
+
 //----------------
+
+function only_one_word(word1) {	
+	
+	num_word_id += 1;
+    var newword = '\n\t<button id="w' + num_word_id + '" class="but_word" ' +
+					' onclick="onclick_rowsplit(this, ' + num_word_id + ')"  ' + 
+					' ondblclick="onclick_row_join(this, ' + num_word_id + ' )">' +
+            word1.replace(empty_WORD,"") +
+            '</button>';
+    return newword;
+
+} // end of only_one_word()
+
+//-----------------------
 function split_in_words(row1) {
+
     var pattern = /[\.\'\",;:\[\]\(\)\/\\\!+|\&]/g; // word separators   ( used to change all separator characters to space
     var patternNot = /[^ ]/g; // accept all character, but exclude space -->  only word and non separator
 
@@ -1965,7 +1879,7 @@ XSRC2="SRT_v2_from_TEXT_1.jstxt";   // FINE
 
 //=========================================================================
                         
-var XSRC3="SRT_v2_from_TEXT_2_time_cut.jstxt"  ; // INIZIO 
+
 
 
 
@@ -1985,7 +1899,9 @@ var minusIncr = plusIncr;
 
 
 var ele_loopCursor    = document.getElementById("id_loopCursor");
-
+var ele_millCharRule  = document.getElementById("id_millCharRule");
+var ele_millCharRule2 = document.getElementById("id_millCharRule2");
+var millCharRule_msg  = ""; 
 var ele_resetValue    = document.getElementById("id_b_resetVal");
 var ele_newValue      = document.getElementById("id_b_confeVal");
 var ele_speed_loop    = document.getElementById("id_rangespeed_loop3");
@@ -2039,122 +1955,48 @@ function playFromToCut3(from1, to1, sw00_loop) {
     playVideo();
 }
 
-
 //----------------------------------
-//?????????????????????????????????????????????????????????????????????????????????????
-
-
-
 
 function oninput_getInpValueLR(distVal) {	
-	
-	//console.log("oninput_getInpValueLR()  distVal=" + distVal); 
-	
-	 
+			 
 	 var this_left  = ele_inpRngFrom ;
 	 var this_right = ele_inpRngTo ;
-	 /**
-	 if (distVal) {
-		this_left.value  = distVal; 
-		this_right.value = distVal; 
-	 }
-	 **/
-	 
-	 /**
-     var left_min1   = parseFloat(this_left.min ); 
-	 var left_max1   = parseFloat(this_left.max  ); 
-	 var left_val1   = parseFloat(this_left.value);  
 	
-	 
-	 
-     var right_min1   = parseFloat(this_right.min ); 
-	 var right_max1   = parseFloat(this_right.max  ); 
-	 var right_val1   = parseFloat(this_right.value);  	 
-	 **/
-	 
 	 minusIncr = parseFloat(this_left.value);  
 	 plusIncr  = parseFloat(this_right.value); 
-	
-	/**
-	// calcola la distanza dal bordo al  cursore (thumb), diventarà la larghezza dei rettangolo laterali, 
-	// quella del rettangolo centrale è la differenza (lungh.tottale - laterali)  
-	
-	left_val1 = left_min1 + (left_max1 - left_val1);  
-	 
-	
-	 var left_perc1  = left_val1 / (left_max1-left_min1); 
-	 
-	
-	 
-	 
-	 
-	  
-	 
-	 var right_perc1  = right_val1 / (right_max1-right_min1);
-	 **/
-	 
-	 /**
-	 var percent_L = ((100*left_perc1)/2).toFixed(0); 
-	 var percent_R = ((100*(1-right_perc1))/2).toFixed(0);
-	 var percent_C = (100 - percent_L - percent_R).toFixed(0);
-	 var percent1 = parseInt(percent_L); 
-	 var percent2 = percent1 + parseInt(percent_C); 	
-		 
-	 var linear_cmd = `linear-gradient(
-				to right,  
-				white 0%,  
-				white ${percent1}% , 
-				lightgrey ${percent1}% ,  
-				lightgrey ${percent2}%, 
-				white ${percent2}%)`;
-		
-	 //ele_inputRangeDiv.style.background = linear_cmd; 
-	 **/
-	 /**	
-	 var minX  = minusIncr * (1-left_perc1)  ;   
-	 var plusX = plusIncr  * right_perc1     ; 
-	 
-	
-	 play_videoFC_from = play_videoFC_cut_time - minX;  
-	 play_videoFC_to   = play_videoFC_cut_time + plusX;  
-	 **/
+
 	 
 	 play_videoFC_from = play_videoFC_cut_time - minusIncr ;  
 	 play_videoFC_to   = play_videoFC_cut_time + plusIncr;  
-	 
-	 
-	 
+	
 	 ele_loopCursor.min   = play_videoFC_from.toFixed(3);
      ele_loopCursor.value = play_videoFC_cut_time.toFixed(3);
 	 ele_loopCursor.max   = play_videoFC_to.toFixed(3);
-	 
-	 //modify_speed_according_to_timeInterval_to_play(play_videoFC_to - play_videoFC_from);		
+	 	 
+	var slide_secs = play_videoFC_to - play_videoFC_from; 
+	
+	var numSlideChar = Math.round(1000 * slide_secs / milliseconds_per_char); 
+	var new_slide_millisecs = numSlideChar * milliseconds_per_char; 
+	var diff_slide_millisecs = 1000 *slide_secs -  new_slide_millisecs; 
 	
 	/**
-	var perc_w_Left_link   = 100 * left_perc1/2; 
-	var perc_w_Right_link  = 100 * (1-right_perc1)/2; 	
-	var perc_w_Middle_link = 100 - perc_w_Left_link - perc_w_Right_link;  	
-	
-	ele_left_linkLine.style.width    = perc_w_Left_link.toFixed(0)   + "%"; 	
-	ele_middleLink.style.width       = perc_w_Middle_link.toFixed(0) + "%"; 	
-	ele_right_linkLine.style.width   = perc_w_Right_link.toFixed(0)  + "%"; 	
-	
-	ele_0left_linkLine.style.width    = perc_w_Left_link.toFixed(0)   + "%"; 	
-	ele_0middleLink.style.width       = perc_w_Middle_link.toFixed(0) + "%"; 	
-	ele_0right_linkLine.style.width   = perc_w_Right_link.toFixed(0)  + "%"; 	
-	
-	
-	document.getElementById("id_m_2").innerHTML  = (play_videoFC_to - play_videoFC_from).toFixed(3).replace(".",localDec);   
-	
-	
-	ele_0left_linkLine.innerHTML    = play_videoFC_from.toFixed(3).replace(".",localDec);   	 	
- 	ele_0middleLink.innerHTML       = ""; 
-	ele_0right_linkLine.innerHTML   = play_videoFC_to.toFixed(3).replace(".",localDec);   
+	<div id="id_millCharRule" class="ticks w100	padmar0	border1 ">
+                  <span class="o_txt">|</span>
+                  <span class="o_txt">|</span>
+                  <span class="o_txt">|</span>     
+	</div> 				
 	**/
-	//c onsole.log(" 2 oninput_getInpValue() " + ele_0left_linkLine.innerHTML + "  -- " + ele_0right_linkLine.innerHTML);
 	
-} // end of oninput_getInpValue()
-
+	// roughly draw  one tick each spoken character 
+	var newruler =""; 
+	for(var r=0; r <= numSlideChar; r++) {
+		newruler += '<span class="o_txt">|</span>\n' ; 
+	} 
+	ele_millCharRule.innerHTML =  newruler; 
+	if (millCharRule_msg == "") {millCharRule_msg = document.getElementById("m333").innerHTML;} 
+	ele_millCharRule2.innerHTML = millCharRule_msg.replace("§milliseconds_per_char§", milliseconds_per_char) ; 
+	
+} // end of oninput_getInpValueLR()
 
 //-----------------------------------		
 // 
@@ -2252,20 +2094,9 @@ function stop_theWatch() {
 	pauseVideo();
 	 
 }
-//----------------------------------
-
-function TOGLIonclick_incr_m(this1) {
-	minusIncr = parseInt(this1.value); 
-	onclick_separ_reset(); 
-}
-//----------------------------------
-
-function TOGLIonclick_incr_p(this1) {
-	plusIncr = parseInt(this1.value); 	
-	onclick_separ_reset(); 	
-}
 
 //-----------------------------
+
 function onchangeCutTimeValue3() {
    // the slide has been moved the value of time is changed 
    // 		input: id=id_pointX   value
@@ -2353,8 +2184,10 @@ function onclick_separ_confirm() {
 	vid.playbackRate = parseFloat( document.getElementById("id_rangespeed_gen1").value ); 
 		
 	ele_slider_separ_time.style.display = "none";
+	
 	confirmCutTime() ;	
-}
+	
+} // end of  onclick_separ_confirm()
 
 //------------------------------------------------
 
@@ -2369,10 +2202,12 @@ function onclick_separ_reset() {
 	
 	play_videoFC_from   =  play_videoFC_cut_time - minusIncr; 
 	play_videoFC_to     =  play_videoFC_cut_time + plusIncr ; 
-	 
+ 
    ele_loopCursor.min   = play_videoFC_from.toFixed(3);
    ele_loopCursor.value = play_videoFC_cut_time.toFixed(3);
    ele_loopCursor.max   = play_videoFC_to.toFixed(3);
+   
+    
 	//------------------------
 	ele_cut_point.innerHTML =  play_videoFC_cut_time.toFixed(3).replace(".",localDec);  
 	var hhmmss = new Date(play_videoFC_cut_time * 1000).toISOString().substr(11, 12);
@@ -2380,10 +2215,12 @@ function onclick_separ_reset() {
 	
 	oninput_getInpValueLR('reset'); 
 									
- }
+ }  // end of onclick_separ_reset()
+ 
 //------------------------------------
- //-------------------------------------------------------
+
 function onclick_centerTheCursor() {
+
 	// function called by html
 	let center_second = parseFloat( ele_loopCursor.value) ;
 	
@@ -2391,7 +2228,6 @@ function onclick_centerTheCursor() {
 	
 	play_videoFC_from = center_second - minusIncr;
 	play_videoFC_to   = center_second + plusIncr;
-	
 	
 	 ele_loopCursor.min   = play_videoFC_from.toFixed(3);
      ele_loopCursor.value = play_videoFC_cut_time.toFixed(3);
@@ -2399,63 +2235,18 @@ function onclick_centerTheCursor() {
 	 
 	oninput_getInpValueLR(); //   distVal );
 	
-	
-	/***
-	
-	var wide = (parseFloat(ele_loopCursor.max) -  parseFloat(ele_loopCursor.min)) / 2 ;
-	play_videoFC_from = center_second - wide;
-	play_videoFC_to   = center_second + wide;
-	
-	ele_loopCursor.min   = play_videoFC_from.toFixed(3);
-    ele_loopCursor.max   = play_videoFC_to.toFixed(3);
-	
-	play_videoFC_from = center_second - minusIncr;
-	play_videoFC_to   = center_second + plusIncr;
-	
-	**
-    var left_min1   = parseFloat(ele_inpRngFrom.min ); 
-	var left_max1   = parseFloat(ele_inpRngFrom.max  ); 
-	
-	var distVal = (left_max1 - left_min1) * (wide / minusIncr); 
-	**
-	oninput_getInpValueLR(); //   distVal );
-	***/
 } // end of onclick_centerTheCursor()
  
-//-------------------------------------------------------
-function TOGLIonclick_centerTheCursor() {
-	// function called by html
-	let center_second = parseFloat( ele_loopCursor.value) ;
-	play_videoFC_cut_time = center_second;
-	
-	var wide = (parseFloat(ele_loopCursor.max) -  parseFloat(ele_loopCursor.min)) / 2 ;
-	play_videoFC_from = center_second - wide;
-	play_videoFC_to   = center_second + wide;
-	
-	ele_loopCursor.min   = play_videoFC_from.toFixed(3);
-    ele_loopCursor.max   = play_videoFC_to.toFixed(3);
-	
-	play_videoFC_from = center_second - minusIncr;
-	play_videoFC_to   = center_second + plusIncr;
-
-    var left_min1   = parseFloat(ele_inpRngFrom.min ); 
-	var left_max1   = parseFloat(ele_inpRngFrom.max  ); 
-	
-	var distVal = (left_max1 - left_min1) * (wide / minusIncr); 
-	
-	oninput_getInpValueLR( distVal );
-	
-} // end of TOGLIonclick_centerTheCursor()
-//-------------------------------------------------------
-
 //-------------------------------------------------------
 function onclick_hideShowSlider2(ele_caller, typesrt="", srt_num_id="", srt_time_to_secs="", srt_time_to_hhmmss="") {
 			
 	if (ele_slider_separ_time.style.display == "block") {
 		ele_slider_separ_time.style.display = "none"; 
 		return;
-	}	
+	}
 	
+	fun_getMsecOverChar_Ruler( ele_caller ); // calculate milliseconds_per_char
+
 	ele_slider_separ_time.style.display = "block";
 	ele_div20_2.style.display = "none";
 	
@@ -2471,14 +2262,19 @@ function onclick_hideShowSlider2(ele_caller, typesrt="", srt_num_id="", srt_time
 	var word_pre = ""; var word_next = "";
 	var num_id = parseInt( srt_num_id ); 
 	var v1, ww1;
-	for(v1=num_id - 5; v1<num_id; v1++) {     	
+	var maxlenCH = 50; 
+	for(v1=num_id - 10; v1<num_id; v1++) {     	
 		ww1 = document.getElementById("w" + v1 );
 		if (ww1) { word_pre += " " + ww1.innerHTML; }
 	}
-	for(v1=num_id; v1<=num_id+5; v1++) {     	
+	for(v1=num_id; v1<=num_id+10; v1++) {     	
 		ww1 = document.getElementById("w" + v1 );
 		if (ww1) { word_next += " " + ww1.innerHTML; }
 	}    
+	word_next = word_next.substring(0,maxlenCH); 
+	if (word_pre.length > maxlenCH) {
+		word_pre = word_pre.substring( word_pre.length-maxlenCH ) ; 
+	}  
 	
     document.getElementById("idword_left").innerHTML  = word_pre;
     document.getElementById("idword_right").innerHTML = word_next;
@@ -2504,24 +2300,6 @@ function onclick_hideShowSlider2(ele_caller, typesrt="", srt_num_id="", srt_time
 	
 //------------	
 
-function TOGLIupdateVal() {	
-	rangeVal = parseFloat(ele_inpRngFrom.value);
-	var showVal = parseFloat( (0-rangeVal).toFixed(1) ) ;
-	//ele_rangeVal_hidden.innerHTML = showVal; 
-	//var lenSegno = ele_rangeVal_hidden.offsetWidth; 
-    
-	//let px = parseInt( ((rangeVal - rangeMin) * off) + leftInput - lenSegno/2 ) ; //  - halfParentWidth ; 
-	
-	//let px = parseInt( ((rangeMax - rangeVal) * off) + leftInput - lenSegno/2 ) ; //  - halfParentWidth ; 
-	
-	//ele_rangeVal_show.innerHTML = showVal; 	
-	//ele_rangeVal_show.style.paddingLeft = px + "px";  
-	
-	//document.getElementById("updateVal()  ele_rangeVal_show.innerHTML=" + ele_rangeVal_show.innerHTML ); 
-	
-	
-} // end of updateVal()
-  //------------	
 function updateVal_L() {	
 	rangeVal = parseFloat(ele_inpRngFrom.value);
 	var showVal = parseFloat((rangeVal).toFixed(1)) ;	
@@ -2529,7 +2307,9 @@ function updateVal_L() {
 	minusIncr = showVal; 
 	onclick_separ_reset(); 	
 }
-	 //------------	
+
+//------------	
+
 function updateVal_R() {	
 	var rangeValR = parseFloat(document.getElementById("id_inpRngTo").value );
 	var showVal = parseFloat((rangeValR).toFixed(1)) ;
@@ -2539,7 +2319,185 @@ function updateVal_R() {
 	onclick_separ_reset(); 		
 }
 
-//------------------------
-XSRC3="SRT_v2_from_TEXT_2_time_cut.jstxt";    //FINE       
+//--------------------------------------
 
+function TOGLIonclick_getMsecOverChar( this1 ) {
+	if (this1 == null) return; 
+	
+	var numW = this1.id.substring(2);
+	if (numW <=1 ) return;  
+	var list_c_row = document.getElementsByClassName("c_row");
+	var id_r = 0;
+	var num_row_next = 0, num_row_prev = 0, num_row_this = 0;
+	var nowL = 0
+	num_row_next = numW;
+	
+	var atLeast_w = 10; 
+	
+	for (var l=0; l< list_c_row.length; l++) {
+		id_r = parseInt(list_c_row[l].id.substring(3) ) ;   //  <button id="ra62" class="button c_row" 
+		if (id_r > numW) {
+			num_row_next = id_r;
+			if (id_r > (num_row_this + atLeast_w)) break; 
+		}		
+		if (id_r <= numW) {
+			num_row_this = id_r;
+			nowL = l;  
+		}
+	}  	
+	
+	l = list_c_row.length-1;
+	var max_next = parseInt(list_c_row[l].id.substring(3) ) ;  
+	num_row_next = Math.min( num_row_next , max_next);  
+	
+	var prev5 = Math.max(0,num_row_this - atLeast_w) ; 
+	num_row_prev = 1;
+	for (l=nowL-1; l >=0; l--) {
+		id_r = parseInt(list_c_row[l].id.substring(3) ) ;   //  <button id="ra62" class="button c_row" 
+		if (id_r < prev5) { 
+			num_row_prev = id_r;
+			break; 
+		}  
+	}  	
+	if (num_row_prev < 1)  num_row_prev = 1; 
+	var eleP = document.getElementById("rt" + num_row_prev) ; 
+	var eleT = document.getElementById("rt" + num_row_this) ; 
+	var eleN = document.getElementById("rt" + num_row_next) ; 
+	//if (eleP == null) return ;
+	if (eleT == null) return ;
+	if (eleN == null) return ;
+	
+	//var wordP = eleP.innerHTML ; 
+	var wordT = eleT.innerHTML ; 
+	var wordN = eleN.innerHTML ; 
+	/**	
+	console.log( "onclick_getMsecOverChar() " + 
+			"\n\t" + "prev='row" + num_row_prev + "' " + wordP +			
+			"\n\t" + "this='row" + num_row_this + "' " + wordT +
+			"\n\t" + "next='row" + num_row_next + "' " + wordN );
+	**/		
+	var txtW1="",  txtW2 = "" ;		
+	var ww1; 
+	var numChar=0, numChar1=0, numChar2=0;
+	var numP=0, numN=0;
+	
+	for( var w = num_row_prev; w < num_row_next+1; w++) {
+		ww1 = document.getElementById("w" + w).innerHTML.replace("&nbsp;",""); 
+		numChar = ww1.length; 
+		
+		if (w < num_row_this) { txtW1 += ww1; numChar1 += numChar; numP++; }
+		else { txtW2 += ww1; numChar2 += numChar; numN++;}
+	} 	
+	//var msecs_P = 1000 * parseFloat(wordP.substring(15) ) ;  
+	var msecs_T = 1000 * parseFloat(wordT.substring(15) ) ;  
+	var msecs_N = 1000 * parseFloat(wordN.substring(15) ) ;  
+	//var mdiff_P = msecs_T - msecs_P;
+	var mdiff_N = msecs_N - msecs_T;
+	/**
+	console.log( wordP + " " + txtW1 + "\n" + wordT + " " + txtW2 + "\n" + wordN ); 
+	console.log( wordP + " " + msecs_P + " chr=" + numChar1 + " diff1=" + mdiff_P + " w=" + numP + 
+			" millsec/char=" + parseInt(mdiff_P / numChar1) +  
+			" millsec/wo=" + parseInt(mdiff_P / numP) +  
+		  "\n" + wordT + " " + msecs_T + " chr=" + numChar2 + " diff2=" + mdiff_N + " w=" + numN + 
+			" millsec/char=" + parseInt(mdiff_N / numChar2) +  
+			" millsec/wo=" + parseInt(mdiff_N / numN) +    
+		  "\n" + wordN + " " + msecs_N );  
+	**/	  
+		 
+	this1.innerHTML = parseInt(mdiff_N/numChar2);   	
+			
+} // end of TOGLIonclick_getMsecOverChar() 
+
+//--------------------------------------------
+
+
+function fun_getMsecOverChar_Ruler( this1  ) {
+
+	if (this1 == null) return; 
+	/*		
+		<span id="row1" class="c_row">
+			<br id="wbr1">
+			<button id="rc1" class="button" onclick="onclick_precisionCut3(this)">🔎</button> 
+			<input id="ri1" type="time" value="00:00:00.000" step="0.001">
+			<span id="rt1" style="display:none">00:00:00.000 = 0</span>	
+			<button id="ra1" class="button" onclick="onclick_playFrom(this)"><span>🗣</span></button>
+		</span>
+	*/
+	var numW = this1.id.substring(2);
+	if (numW <=1 ) return;  
+	var list_c_row = document.getElementsByClassName("c_row");
+	var id_r = 0;
+	var num_row_next = 0, num_row_prev = 0, num_row_this = 0;
+	var nowL = 0
+	num_row_next = numW;
+	
+	var atLeast_w = 10; 
+	
+	for (var l=0; l< list_c_row.length; l++) {
+		id_r = parseInt(list_c_row[l].id.substring(3) ) ;   //  <button id="rc62" ...
+		if (id_r > numW) {
+			num_row_next = id_r;
+			if (id_r > (num_row_this + atLeast_w)) break; 
+		}		
+		if (id_r <= numW) {
+			num_row_this = id_r;
+			nowL = l;  
+		}
+	}  	
+	
+	l = list_c_row.length-1;
+	var max_next = parseInt(list_c_row[l].id.substring(3) ) ;  
+	num_row_next = Math.min( num_row_next , max_next);  
+	
+	var eleT = document.getElementById("rt" + num_row_this) ; 
+	var eleN = document.getElementById("rt" + num_row_next) ; 
+	
+	if (eleT == null) return ;
+	if (eleN == null) return ;
+		
+	var wordT = eleT.innerHTML ; 
+	var wordN = eleN.innerHTML ; 
+		
+	var txtW2 = "" ;		
+	var ww1; 
+	var numChar2=0;
+	
+	for( var w = num_row_this; w < num_row_next+1; w++) {
+		ww1 = document.getElementById("w" + w).innerHTML.replace("&nbsp;",""); 		
+		numChar2 += ww1.length; 
+	} 	
+	
+	var msecs_T = 1000 * parseFloat(wordT.substring(15) ) ;  
+	var msecs_N = 1000 * parseFloat(wordN.substring(15) ) ;  
+	var mdiff_N = msecs_N - msecs_T;
+	
+	milliseconds_per_char =  parseInt(mdiff_N/numChar2);  	
+	
+} // end of fun_getMsecOverChar_Ruler()
+
+//------------------------------------
+function onclick_can_breakLine(sw) {
+	sw_line_can_be_broken = sw; 
+	if (sw_line_can_be_broken) { 
+		document.getElementById("lab_breakLineYes").style.fontWeight = "bold"; 
+		document.getElementById("lab_breakLineNo" ).style.fontWeight = "normal"; 
+	} else {		
+		document.getElementById("lab_breakLineYes").style.fontWeight = "normal"; 
+		document.getElementById("lab_breakLineNo" ).style.fontWeight = "bold"; 
+	}	
+} // end of onclick_can_breakLine
+
+//------------------------
+function head_button() {
+	
+	var startRow = '<span>' +
+		'<button class="button" style="visibility:hidden;" disabled >' + magnifyingGlass_symb + '</button> ' +		
+		'<span id="id_headtime"  style="font-weight:bold; font-size:1.2em;">' +		
+		document.getElementById("m338").innerHTML +		
+		'</span>' + 
+		'</span> \n';  	
+		
+	return startRow;
+	
+} // end of head_button() 
 //=========================================================================

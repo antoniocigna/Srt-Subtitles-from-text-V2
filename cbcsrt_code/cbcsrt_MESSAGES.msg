@@ -125,10 +125,11 @@ function get_messages() {
 		<Sm312> <b> Confirm </b> <br> the new value </Sm312>
 		<Sm313> <b> Restore </b> the original value<br> </Sm313>		
 		<Sm314> centers the cursor </Sm314>		
-		<Sm315> <b> Set the end time (hour:minutes:seconds,milliseconds) of a line by clicking on the [speakinghead_symb] button 
-			and on the last word of the line </b>
-			<br> (for more information, click the <b> What to do </b> button)
+		<Sm315> <b> Set the end time (hour:minutes:seconds,milliseconds) of a line by clicking firstly on the [speakinghead_symb] button 
+			<br>and then on the last word of the line immediately after it is spoken</b>
+			<br>(for more information, click the <b> What to do </b> button)
 		</Sm315>
+		
 		<Sm316> creates an srt subtitle file using </Sm316>
 		<Sm317> an existing text file or <br> srt or vtt subtitle file
 			<small> (if you may want to correct the start and end times) </small>
@@ -165,7 +166,10 @@ function get_messages() {
 		<Sm330>Time</Sm330>
 		<Sm331>end of Play left <br> and start of Play right </Sm331>
 		<Sm332>seconds</Sm332>
-		
+		<Sm333>roughtly §milliseconds_per_char§ milliseconds per character</Sm333> 
+		<Sm336>text lines can be splitted</Sm336>
+		<Sm337>text lines cannot be splitted</Sm337>		
+		<Sm338>line end time</Sm338>
 	</lang_en>	
 		
 	<lang_it>
@@ -230,7 +234,8 @@ function get_messages() {
 		<Sm313><b>Ripristina</b><br>originale</Sm313>		
 		<Sm314>centra il cursore</Sm314>		
 		<Sm315><b>Imposta il tempo di fine (ora:minuti:secondi,millisecondi) di una riga 
-			facendo clic sul pulsante [speakinghead_symb] e sull'ultima 	parola	della riga </b>
+			facendo clic sul pulsante [speakinghead_symb] 
+			<br>e poi sull'ultima parola della riga subito dopo che è stata pronunciata</b>
 			<br>(per ulteriori informazioni, fare clic sul pulsante <b>Cosa fare</b>)
 		</Sm315>
 		<Sm316>crea un file di sottotitoli srt utilizzando</Sm316>
@@ -271,7 +276,10 @@ function get_messages() {
 		<Sm330>Tempo</Sm330>
 		<Sm331>di fine Play sinistra <br>e inizio di Play destra</Sm331>
 		<Sm332>secondi</Sm332>
-		
+		<Sm333>pressappoco §milliseconds_per_char§ millisecondi per carattere</Sm333> 
+		<Sm336>le righe di testo possono essere spezzate</Sm336>
+		<Sm337>le righe di testo non possono essere spezzate</Sm337>
+		<Sm338>ora di<br>fine riga</Sm338>
 	</lang_it>
 </messages>	
 `; // end of xml_text ( ` alt + 96 )
