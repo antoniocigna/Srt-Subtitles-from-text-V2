@@ -831,7 +831,7 @@ function build_srt_list() {
 	
         var child1 = butwords[x];
 		var last_ix=-1; 
-		console.log("\n--------------------------\nbuild_srt_list() child1=" + child1.outerHTML ); 
+		//console.log("\n--------------------------\nbuild_srt_list() child1=" + child1.outerHTML ); 
 		
 		if (child1.tagName == "SPAN") {	// row begin is in   span/span	
 			
@@ -974,6 +974,9 @@ function onclick_write_srt() {
 	for (v = 0; v < list_time_stamp.length; v++) {
 		var str2 = list_text[v] ;
 		if (str2 == "") { continue; }
+		if (v < 5) {
+			if (str2.trim() == "_.") continue;
+		}
         numGr += 1;
 		var xtime = list_time_stamp[v]; 
 		if ( xtime.substr(0,12) == FAKE_time) {
@@ -984,13 +987,14 @@ function onclick_write_srt() {
 		
         srt_txt += "\n\n" + numGr + "\n" + list_time_stamp[v] + "\n" + str2 ;
     }
-	
-	
-    if (numGr < 2) {
+	if (numGr < 2) {
         return;
     }
-
-    download(filename_srt, srt_txt);
+	if (srt_txt.substr(0,2) == "\n\n") {
+		download(filename_srt, srt_txt.substring(2) + "\n"); 
+	} else {  
+		download(filename_srt, srt_txt + "\n"); 
+	}
 
 } // end of onclick_write_srt()
 //--------------------------------------
@@ -1274,7 +1278,7 @@ function get_srt_dataInput( sw_srt ) {
 	
     document.getElementById("id_p_text").innerHTML = allrows2;
 		
-	console.log("??anto? allrows2 =\n" +allrows2.substring(0,500)); 
+	//console.log("allrows2 =\n" +allrows2.substring(0,500)); 
 
 } // end of get_srt_dataInput()
 
@@ -2489,7 +2493,7 @@ function onclick_can_breakLine(sw) {
 
 //------------------------
 function head_button() {
-	
+	/**
 	var startRow = '<span>' +
 		'<button class="button" style="visibility:hidden;" disabled >' + magnifyingGlass_symb + '</button> ' +		
 		'<span id="id_headtime"  style="font-weight:bold; font-size:1.2em;">' +		
@@ -2498,6 +2502,20 @@ function head_button() {
 		'</span> \n';  	
 		
 	return startRow;
+	**/
+	
+	var startRow = '<div style="display:flex;">' +
+		'<div >' + 
+		'	<button class="button" style="visibility:hidden;" disabled >' + magnifyingGlass_symb + '</button> ' +		
+		'</div>' + 
+		'<div id="id_headtime"  style="font-weight:bold; font-size:1.2em;width:8em;text-align:center;">' +		
+			document.getElementById("m338").innerHTML +		
+		'</div>' + 
+		'</div> \n';  	
+		
+	return startRow;
+	
+	
 	
 } // end of head_button() 
 //=========================================================================

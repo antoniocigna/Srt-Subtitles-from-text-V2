@@ -78,8 +78,7 @@ function get_messages() {
 		<Sm065> speed too low </Sm065>
 		<Sm069> Play left </Sm069>
 		<Sm071> Play right </Sm071>
-		<Sm072> Time </Sm072>
-		<Sm073> end of Play left <br> and start of Play right </Sm073>			
+			
 		<Sm300> Download the srt file </Sm300>
 		<Sm301> The audio or video file is missing </Sm301>
 		<Sm302> the file type is incompatible </Sm302>
@@ -135,8 +134,7 @@ function get_messages() {
 			<small> (if you may want to correct the start and end times) </small>
 		</Sm317>
 		<Sm318> a video or audio file. </Sm318>
-		<Sm319> seconds </Sm319>
-		<Sm320> seconds </Sm320>
+		
 		<Sm321>
 			This page is used to better define the precise moment <b> T </b> in which one line ends and the next one begins.
 			<br>To check how good the separation time is,
@@ -156,9 +154,7 @@ function get_messages() {
 			<br>
 			<br> When you are satisfied with the result, press the <b> Confirm </b> button.
 		</Sm321>	
-		<Sm322> stop playing, immediately after splitting lines </Sm322>
-		<Sm323> Not </Sm323>
-		<Sm324> Yes </Sm324>		
+			
 		<Sm325>start playback </Sm325>
 		<Sm326>seconds ahead of separation time </Sm326>		
 		<Sm327>end playback </Sm327>
@@ -187,8 +183,7 @@ function get_messages() {
 		<Sm065>velocità troppo bassa</Sm065>
 		<Sm069>Play sinistra</Sm069>			
 		<Sm071>Play destra</Sm071>
-		<Sm072>Tempo</Sm072>
-		<Sm073>di fine Play sinistra <br>e inizio di Play destra</Sm073>	
+		
 		<Sm300>Scarica il file srt</Sm300>
 		<Sm301>Manca il file audio o video</Sm301>
 		<Sm302>il tipo di file è incompatibile </Sm302>
@@ -243,8 +238,7 @@ function get_messages() {
 			<small>(es. per correggere il tempo di inizio e fine)</small>
 		</Sm317>
 		<Sm318>un video o un file audio.</Sm318>			
-		<Sm319>secondi</Sm319>
-		<Sm320>secondi</Sm320>
+		
 		<Sm321>			
 			Questa pagina serve per definire meglio il momento preciso <b>T</b>  
 			in cui termina un riga ed inizia la successiva.
@@ -266,9 +260,7 @@ function get_messages() {
 			<br>
 			<br>Quando si è soddisfatti del risultato premere il tasto <b>Conferma</b>. 
 		</Sm321>
-		<Sm322>interrompi la riproduzione subito dopo la divisione delle righe</Sm322>		
-		<Sm323>No</Sm323>
-		<Sm324>Sì</Sm324>
+		
 		<Sm325>inizia Play</Sm325> 
 		<Sm326>secondi prima del tempo</Sm326>		
 		<Sm327>termina Play</Sm327> 
