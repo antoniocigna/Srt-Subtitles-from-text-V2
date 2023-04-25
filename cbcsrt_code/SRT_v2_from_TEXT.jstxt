@@ -797,7 +797,6 @@ function appendTextToLastValid( ix2, text1) {
 
 //----------------------------
 function build_srt_list() {
-
 	
     list_time_stamp = [];
     list_time_from_secs = [];
@@ -810,9 +809,7 @@ function build_srt_list() {
 
     time_from_hhmmss = "00:00:00,000";
     time_from_secs = 0.0;
-    txtGr = "";
-    
-   
+    txtGr = "";   
     
 	var butwords = document.getElementById("id_p_text").children;
 	
@@ -824,41 +821,30 @@ function build_srt_list() {
 	
 	time_from_hhmmss = "00:00:00,000";
 	time_from_secs=0;
-	txtGr = PR;
-	
+	txtGr = PR;	
 	//----------------------
-	for (var x = begX; x < last_x; x++) {
-	
+	for (var x = begX; x < last_x; x++) {		
         var child1 = butwords[x];
 		var last_ix=-1; 
-		//console.log("\n--------------------------\nbuild_srt_list() child1=" + child1.outerHTML ); 
 		
-		if (child1.tagName == "SPAN") {	// row begin is in   span/span	
-			
+		if (child1.tagName == "SPAN") {	// row begin is in   span/span				
 			time_to = get_time( child1.outerHTML ); 
 			if (time_to == null) { continue; }
 				
 			
             time_to_hhmmss = time_to[0].trim();
             time_to_secs   =  parseFloat( time_to[1]);	
-			/***
-			if (time_from_hhmmss == FAKE_time) {  // this is last part of the text which doesn't have assigned timestamp ( run has been interrupted)  
-				appendTextToLastValid( last_ix, txtGr ); 
-				txtGr=""; 
-				continue; 
-			}
-			***/
-			
+						
 			last_ix = push_gr_srt00( time_from_secs,time_to_secs, time_from_hhmmss, time_to_hhmmss,    txtGr);
-			
-			
+						
             time_from_hhmmss = time_to_hhmmss;
             time_from_secs = time_to_secs;
             txtGr = "";
-            continue;			
-			
+            continue;				
 		} else {
-			txtGr += child1.innerHTML;
+			if (x >0) {
+				txtGr += child1.innerHTML;
+			}	
 		}		
 	}
 
