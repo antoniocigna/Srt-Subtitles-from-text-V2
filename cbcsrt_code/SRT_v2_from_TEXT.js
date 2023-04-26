@@ -958,11 +958,13 @@ function onclick_write_srt() {
 	***/
 	
 	for (v = 0; v < list_time_stamp.length; v++) {
-		var str2 = list_text[v] ;
+		var str2 = list_text[v].replace("_.","").trim();
 		if (str2 == "") { continue; }
+		/**
 		if (v < 5) {
-			if (str2.trim() == "_.") continue;
+			if (str2 == "_.") continue;
 		}
+		**/
         numGr += 1;
 		var xtime = list_time_stamp[v]; 
 		if ( xtime.substr(0,12) == FAKE_time) {
